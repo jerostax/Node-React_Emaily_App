@@ -9,13 +9,14 @@
    2. [Enable Google Auth](#enable-google)
    3. [Secure API keys](#secure-api)
    4. [Google Strategy](#google-strategy)
+   5. [OAuth Callbacks](#oauth-callbacks)
 4. [MongoDB](#mongodb)
 
 ## 1 - Server Setup <a name="server-setup"></a>
 
 ### 1.1 - Init npm
 
-- Created server folder and initialized npm inside of it :
+- Create a server folder and initialize npm inside of it :
 
 ```
   npm init
@@ -31,7 +32,7 @@
 
 ### 1.3 - Require express and setup
 
-- Create index.js file in the project and add :
+- Create index.js file in the server folder and add :
 
 ```js
 const express = require('express');
@@ -210,7 +211,7 @@ const keys = require('./config/keys');
   );
 ```
 
-#### 3.4.2 - Add a route handler
+#### 3.4.2 - Add a callback URL to GoogleStrategy
 
 - We add the callback URL as a third property of GoogleStrategy :
 
@@ -241,6 +242,34 @@ const keys = require('./config/keys');
   +   }
     )
   );
+```
+#### 3.4.4 - Add a route handler
+
+
+- Add the code bellow to tell express to handle the path we want with passport :
+
+```js
+  app.get(
+    '/auth/google',
+    passport.authenticate('google', {
+      scope: ['profile', 'email']
+    })
+  );
+``` 
+The scope specify to google what acces we want to have in the user's account (profile, email here)
+
+#### 3.4.5 - Test if it works
+
+- Start back your server with the command node index.js and go to http://localhost:5000/auth/google
+
+### 3.5 - Handle OAuth Callbacks <a name="oauth-callbacks">
+
+#### 3.5.1 New route handler
+
+- we create a second route handler in our index.js :
+
+```js
+  app.get('/auth/google/callback', passport.authenticate('google'));
 ```
 
 ## 4 - MongoDB <a name="mongodb"></a>
