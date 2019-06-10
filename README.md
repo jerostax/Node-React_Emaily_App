@@ -6,6 +6,7 @@
 2. [Heroku Deployment](#heroku)
 3. [Google OAuth](#google)
   1. [Passport Library](#passport)
+4. [MongoDB](#mongodb)
 
 ## Server Setup <a name="server-setup"></a>
 
@@ -102,3 +103,5 @@ We use [passport library](http://www.passportjs.org/packages/) to handle a part 
 
 - passport: General helpers for handling auth in Express apps
 - passport strategy: helpers for authenticating with one specific method (email/password, Google, Facebook...)
+
+## MongoDB <a name="mongodb"></a>
