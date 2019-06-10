@@ -591,9 +591,9 @@ passport.use(
 
 note: first argument null = everything went fine, second argument the existingUser if the first case or the new user 'user' in the second case
 
-## 6.5 Generate a Token for the user <a name="generate-token"></a>
+## 6.5 - Generate a Token for the user <a name="generate-token"></a>
 
-### 6.5.1 Use serializeUser to generate a token in the passport file
+### 6.5.1 - Use serializeUser to generate a token in the passport file
 
 ```js
   passport.serializeUser((user, done) => {
@@ -602,5 +602,65 @@ note: first argument null = everything went fine, second argument the existingUs
 ``` 
 
 note: we pass user.id as a second argument (which is not the profile.id but the id property in our user collection in mongoDB)
+
+### 6.5.2 - Use deserializeUser to find the user in the database
+
+```js
+  passport.deserializeUser((id, done) => {
+    User.findById(id).then(user => {
+      done(null, user);
+    });
+  });
+``` 
+
+### 6.5.3 - Make sure passport is aware that we make use of cookies to keep track of the currently signed user
+
+- First install the library cookie-session like so :
+
+```
+  npm install --save cookie-session
+``` 
+
+- Require cookie-session and passport library in index.js :
+
+``` js
+  const cookieSession = require('cookie-session');
+  const passport = require('passport');
+``` 
+
+- Add the fonction app.use() to pass cookieSession and config it like so : 
+
+```js
+  app.use(
+    cookieSession({
+      maxAge: 30 * 23 * 60 * 60 * 1000,
+      keys: [keys.cookieKey]
+    })
+  );
+``` 
+
+note : maxAge is the cookie expiration, 30 days (with days, hours, minuts, seconds, milliseconds), the keys property encrypt our cookie
+
+- Create the cookieKey in the Keys.js file (you can call it the way you want) :
+
+```js 
+  module.exports = {
+    googleClientID:
+      '825885158809-tdf021cnvi52qefd9ap8bbiosjc4rsv2.apps.googleusercontent.com',
+    googleClientSecret: 'RTgGico3cHmxnUONzd8lAI35',
+    mongoURI:
+      'mongodb+srv://jero:q1OC7JudnBJQFziW@emaily-wogr6.mongodb.net/test?retryWrites=true&w=majority',
++   cookieKey: 'yourcookiekey'
+  };
+```
+
+- now we tell passport that it has to you cookies for authentification in index.js :
+
+```js
+  app.use(passport.initialize());
+  app.use(passport.session());
+``` 
+
+
 
 
