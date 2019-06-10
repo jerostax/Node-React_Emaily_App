@@ -1,10 +1,13 @@
 # Emaily App (Node with React Udemy Course @ Stephen Grider)
 
 #### Table of Contents
+
 1. [Server Setup](#server-setup)
 2. [Heroku Deployment](#heroku)
+3. [Google OAuth](#google)
+4. [Passport Library](#passport)
 
-## Server Setup <a name="server-steup"></a>
+## Server Setup <a name="server-setup"></a>
 
 ### `npm init`
 
@@ -91,6 +94,11 @@ git commit -m "un nouveau commit"
 git push heroku master
 ```
 
-## Google OAuth
+## Google OAuth <a name="google"></a>
 
+### Passport Library <a name="passport"></a>
 
+We use [passport library](http://www.passportjs.org/packages/) to handle a part of the Google OAuth flow <br>
+
+- passport: General helpers for handling auth in Express apps
+- passport strategy: helpers for authenticating with one specific method (email/password, Google, Facebook...)
