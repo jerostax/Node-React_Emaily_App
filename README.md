@@ -104,4 +104,25 @@ We use [passport library](http://www.passportjs.org/packages/) to handle a part 
 - passport: General helpers for handling auth in Express apps
 - passport strategy: helpers for authenticating with one specific method (email/password, Google, Facebook...)
 
+#### Installation
+
+```
+npm install --save passport passport-google-oauth20
+```
+
+#### Setup in index.js
+
+Require passport and passport strategy (for google oauth)
+
+```js
+  const passport = require('passport');
+  const GoogleStrategy = require('passport-google-oauth20').Strategy;
+```
+
+Create a new instance of GoogleStrategy 
+
+```js
+  passport.use(new GoogleStrategy());
+``` 
+
 ## MongoDB <a name="mongodb"></a>
