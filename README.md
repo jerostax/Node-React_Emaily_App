@@ -6,7 +6,9 @@
 
 Created server folder and initialized npm inside of it. <br>
 
-### Generated Express App
+### Generate Express App
+
+Create index.js file in the project and add :
 
 ```js
 const express = require('express');
