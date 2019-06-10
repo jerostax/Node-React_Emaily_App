@@ -646,10 +646,10 @@ note : maxAge is the cookie expiration, 30 days (with days, hours, minuts, secon
 ```js 
   module.exports = {
     googleClientID:
-      '825885158809-tdf021cnvi52qefd9ap8bbiosjc4rsv2.apps.googleusercontent.com',
-    googleClientSecret: 'RTgGico3cHmxnUONzd8lAI35',
+      'yourGoogleClientID',
+    googleClientSecret: 'your GoogleClientSecret',
     mongoURI:
-      'mongodb+srv://jero:q1OC7JudnBJQFziW@emaily-wogr6.mongodb.net/test?retryWrites=true&w=majority',
+      'yourMongoDbUri',
 +   cookieKey: 'yourcookiekey'
   };
 ```
@@ -659,7 +659,7 @@ note : maxAge is the cookie expiration, 30 days (with days, hours, minuts, secon
 ```js
   app.use(passport.initialize());
   app.use(passport.session());
-``` 
+```
 
 
 
