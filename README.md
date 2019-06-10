@@ -14,6 +14,7 @@
 5. [Refacto Server Folder](#refacto-server)
 6. [MongoDB Setup](#mongodb-setup)
 7. [Create a mongoDB collection with mongoose Model Classes](#model-class)
+8. [Create a new User in your database with the Google flow](#create-user)
 
 ## 1 - Server Setup <a name="server-setup"></a>
 
@@ -48,7 +49,7 @@ app.get('/', (req, res) => {
 app.listen(5000);
 ```
 
-Here we require express in a const express that we pass into another const app and we create a route handler with app.get(). We also configure the app ton run on the port 5000
+Here we require express in a const express that we pass into another const app and we create a route handler with app.get(). We also configure the app to run on the port 5000
 
 ## 2 - Heroku deployment <a name="heroku"></a>
 
@@ -433,7 +434,7 @@ passport.use(
 - Create a new folder called models in the server directory 
 - Create an User.js file inside the models folder
 
-### 7.2 Create a mongoose model class in User.js
+### 7.2 - Create a mongoose model class in User.js
 
 - first require mongoose and pull out mongoose's Schema property on top of the file 
 
@@ -460,7 +461,45 @@ note : could be const Schema = mongoose.Schema but we use the ES2015 syntaxe
   const express = require('express');
   const mongoose = require('mongoose');
   const keys = require('./config/keys');
-  require('./services/passport');
 + require('./models/User');
+  require('./services/passport');
+``` 
+note : the order matters, we want to call User Model before we define it with passport
+
+- That's it! we now have a new collection called users =)
+
+## 8 - Create a new User in your database with the Google flow <a name="create-user"></a>
+
+### Get acces to the mongoose model inside the google flow
+
+- Go in the passport.js file that contains the google flow 
+- first require the mongoose library and get acces to the User Model Class like so :
+
+```js 
+  const passport = require('passport');
+  const GoogleStrategy = require('passport-google-oauth20').Strategy;
++ const mongoose = require('mongoose');
+  const keys = require('../config/keys');
+
++ const User = mongoose.model('users');
+```
+note : now the User const is the user model class
+
+- Now we use the model class ton create a new instance of user and save it to the database (delete the 3 console.log in the GoogleStrategy):
+
+```js
+  passport.use(
+    new GoogleStrategy(
+      {
+        clientID: keys.googleClientID,
+        clientSecret: keys.googleClientSecret,
+        callbackURL: '/auth/google/callback'
+      },
+      (accessToken, refreshToken, profile, done) => {
++       new User({ googleId: profile.id }).save();
+      }
+    )
+  );
 ``` 
 
+- 
