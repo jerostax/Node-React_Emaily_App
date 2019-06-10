@@ -148,7 +148,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 ```
 
-- Create a new instance of GoogleStrategy :
+- Create a new instance of GoogleStrategy and delete the previous app.get() route handler that won't be necessary for our app :
 
 ```js
 passport.use(new GoogleStrategy());
@@ -237,7 +237,7 @@ const keys = require('./config/keys');
         clientSecret: keys.googleClientSecret,
         callbackURL: '/auth/google/callback'
       },
-  +   accesToken => {
+  +   accessToken => {
   +     console.log(accessToken);
   +   }
     )
@@ -266,10 +266,31 @@ The scope specify to google what acces we want to have in the user's account (pr
 
 #### 3.5.1 New route handler
 
-- we create a second route handler in our index.js :
+- we create a second route handler in our index.js to handle AOuth callbacks when we click to authentificate with Google :
 
 ```js
   app.get('/auth/google/callback', passport.authenticate('google'));
 ```
+
+#### 3.5.2 Console log accesToken / refreshToken / profile / done
+
+- Now update your arrow fx passing 3 other arguments and console.log the first 3 with the code below (crash and run back your server and go back to http://localhost:5000/auth/google to see the console logs in the terminal) :
+
+```js
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: keys.googleClientID,
+      clientSecret: keys.googleClientSecret,
+      callbackURL: '/auth/google/callback'
+    },
+  + (accessToken, refreshToken, profile, done) => {
+  +   console.log('acces token', accessToken);
+  +   console.log('refresh token', refreshToken);
+  +   console.log('profile:', profile);
+    }
+  )
+);
+``` 
 
 ## 4 - MongoDB <a name="mongodb"></a>
