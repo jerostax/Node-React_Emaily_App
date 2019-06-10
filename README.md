@@ -502,4 +502,4 @@ note : now the User const is the user model class
   );
 ``` 
 
-- 
+- Now you can run back your server, go to http://localhost:5000/auth/google and then check your mongoDB database that you created in mongoDB Atlas Cluster and you'll find your user collection with your Google Id
