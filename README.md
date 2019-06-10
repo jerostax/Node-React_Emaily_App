@@ -76,3 +76,11 @@ Use the .git link provided in Heroku create command then :
 git remote add heroku https://git.heroku.com/this-is-an-exemple.git
 git push heroku master
 ```
+
+### 9 - RE-Deploy
+
+```
+git add .
+git commit -m "un nouveau commit"
+git push heroku master
+```
