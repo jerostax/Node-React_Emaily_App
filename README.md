@@ -505,7 +505,7 @@ note : now the User const is the user model class
 
 - Now you can run back your server, go to http://localhost:5000/auth/google and then check your mongoDB database that you created in mongoDB Atlas Cluster and you'll find your user's collection with your Google's Id
 
-## 9 - Mongoose Queries <a name="mongoose-queries"></a>
+## 9 - Mongoose Queries  and Passport Callbacks <a name="mongoose-queries"></a>
 
 ### 9.1 - Initiate query
 
@@ -552,5 +552,37 @@ passport.use(
 );
 ```
 
-- That's it! now we handle existing users or new user in the database when we attempt to connect on our app
+- That's it! now we handle existing users from new user in the database when we attempt to connect on our app
+
+### 9.2 - Passport Callback
+
+- We now need to say to passport when we're done with the authentification flow with done() :
+
+```js 
+  passport.use(
+    new GoogleStrategy(
+      {
+        clientID: keys.googleClientID,
+        clientSecret: keys.googleClientSecret,
+        callbackURL: '/auth/google/callback'
+      },
+      (accessToken, refreshToken, profile, done) => {
+        User.findOne({ googleId: profile.id }).then(existingUser => {
+          if (existingUser) {
+            // we already have a record with the given profile ID
++           done(null, existingUser);
+          } else {
+            // we don't have a user record with the given ID, create a new one
+            new User({ googleId: profile.id })
+              .save()
++             .then(user => done(null, user));
+          }
+        });
+      }
+    )
+  );
+
+```
+
+note: first argument null = everything went fine, second argument the existingUser if the first case or the new user 'user' in the second case
 
