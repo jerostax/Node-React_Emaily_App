@@ -1,6 +1,6 @@
 # Emaily App (Node with React Udemy Course @ Stephen Grider)
 
-# Table of Contents
+## Table of Contents
 
 1. [Server Setup](#server-setup)
 2. [Heroku Deployment](#heroku)
@@ -11,6 +11,7 @@
    4. [Google Strategy](#google-strategy)
    5. [OAuth Callbacks](#oauth-callbacks)
 4. [Nodemon](#nodemon)
+5. [Refacto Server Folder](#refacto-server)
 
 ## 1 - Server Setup <a name="server-setup"></a>
 
@@ -205,8 +206,8 @@ const keys = require('./config/keys');
 ```js
   passport.use(
     new GoogleStrategy({
-    + clientID: keys.googleClientID,
-    + clientSecret: keys.googleClientSecret
++     clientID: keys.googleClientID,
++     clientSecret: keys.googleClientSecret
     })
   );
 ```
@@ -220,7 +221,7 @@ const keys = require('./config/keys');
       new GoogleStrategy({
         clientID: keys.googleClientID,
         clientSecret: keys.googleClientSecret,
-      + callbackURL: '/auth/google/callback'
++       callbackURL: '/auth/google/callback'
     })
   );
 ```
@@ -237,9 +238,9 @@ const keys = require('./config/keys');
         clientSecret: keys.googleClientSecret,
         callbackURL: '/auth/google/callback'
       },
-  +   accessToken => {
-  +     console.log(accessToken);
-  +   }
++     accessToken => {
++      console.log(accessToken);
++    }
     )
   );
 ```
@@ -284,10 +285,10 @@ passport.use(
       clientSecret: keys.googleClientSecret,
       callbackURL: '/auth/google/callback'
     },
-  + (accessToken, refreshToken, profile, done) => {
-  +   console.log('acces token', accessToken);
-  +   console.log('refresh token', refreshToken);
-  +   console.log('profile:', profile);
++   (accessToken, refreshToken, profile, done) => {
++     console.log('acces token', accessToken);
++     console.log('refresh token', refreshToken);
++     console.log('profile:', profile);
     }
   )
 );
@@ -295,7 +296,7 @@ passport.use(
 
 ## 4 - Nodemon <a name="nodemon"></a>
 
-### 4.1 - Install Nodemon to atomatically restart our server
+### 4.1 - Install Nodemon to automatically restart our server
 
 ```
   npm install --save nodemon
@@ -315,4 +316,56 @@ passport.use(
 
 ```
  npm run dev
+```  
+
+## 5 - Refacto server folder <a name="refacto-server"></a>
+
+### 5.1 routes folder
+
+- Create a new folder called routes inside the server folder and create a file authRoutes.js inside of it
+- Cut & Paste the 2 routes handlers in the authRoutes.js file
+- Add the passport require statement at the top like so :
+
+```js
+  const passport = require('passport');
+``` 
+- Export the routes handlers like so :
+```js
++ module.exports = app => {
+    app.get(
+      '/auth/google',
+      passport.authenticate('google', {
+        scope: ['profile', 'email']
+      })
+    );
+
+    app.get('/auth/google/callback', passport.authenticate('google'));
++ };
+```  
+
+### 5.2 services folder
+
+- Create anew folder called services inside the server folder and create a file passport.js inside of it
+- Cut & Paste the passport configuration in the passport.js file
+- Add the passport, GoogleStrategy and keys require statement at the top like so :
+
+```js
+  const passport = require('passport');
+  const GoogleStrategy = require('passport-google-oauth20').Strategy;
+  const keys = require('./config/keys');
+```
+- 
+### 5.3 index.js file
+
+- We don't need passport, GoogleStrategy and keys anymore so delete the require statements
+- require the passport.js file like so :
+```js
+  require('./services/passport');
+```   
+- require authRoutes.js file and call it like so :
+
+```js
+  const app = express();
+
++ require('./routes/authRoutes')(app);
 ```  
