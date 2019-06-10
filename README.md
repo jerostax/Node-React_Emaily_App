@@ -10,7 +10,7 @@
    3. [Secure API keys](#secure-api)
    4. [Google Strategy](#google-strategy)
    5. [OAuth Callbacks](#oauth-callbacks)
-4. [MongoDB](#mongodb)
+4. [Nodemon](#nodemon)
 
 ## 1 - Server Setup <a name="server-setup"></a>
 
@@ -58,7 +58,7 @@ app.listen(PORT);
 
 ### 2.2 - Specify Node and NPM version in package.json
 
-- in package.json right bellow "main" :
+- in package.json right below "main" :
 
 ```js
  "engines": {
@@ -87,7 +87,7 @@ git commit -m "initial commit"
 
 ### 2.5 - Install Heroku CLI in the project after commited it
 
-- Follow the steps in the link bellow :
+- Follow the steps in the link below :
 
 https://devcenter.heroku.com/articles/heroku-cli
 
@@ -246,7 +246,7 @@ const keys = require('./config/keys');
 #### 3.4.4 - Add a route handler
 
 
-- Add the code bellow to tell express to handle the path we want with passport :
+- Add the code below to tell express to handle the path we want with passport :
 
 ```js
   app.get(
@@ -264,7 +264,7 @@ The scope specify to google what acces we want to have in the user's account (pr
 
 ### 3.5 - Handle OAuth Callbacks <a name="oauth-callbacks">
 
-#### 3.5.1 New route handler
+#### 3.5.1 - New route handler
 
 - we create a second route handler in our index.js to handle AOuth callbacks when we click to authentificate with Google :
 
@@ -272,7 +272,7 @@ The scope specify to google what acces we want to have in the user's account (pr
   app.get('/auth/google/callback', passport.authenticate('google'));
 ```
 
-#### 3.5.2 Console log accesToken / refreshToken / profile / done
+#### 3.5.2 - Console log accesToken / refreshToken / profile / done
 
 - Now update your arrow fx passing 3 other arguments and console.log the first 3 with the code below (crash and run back your server and go back to http://localhost:5000/auth/google to see the console logs in the terminal) :
 
@@ -293,4 +293,14 @@ passport.use(
 );
 ``` 
 
-## 4 - MongoDB <a name="mongodb"></a>
+## 4 - Nodemon <a name="nodemon"></a>
+
+### 4.1 - Install Nodemon to atomatically restart our server
+
+```
+  npm install --save nodemon
+``` 
+
+### 4.2 Setup nodemon
+
+- In package.json we add the script below in the scripts section :

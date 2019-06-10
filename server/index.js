@@ -13,9 +13,9 @@ passport.use(
       callbackURL: '/auth/google/callback'
     },
     (accessToken, refreshToken, profile, done) => {
-      console.log('acces token', accessToken);
-      console.log('refresh token', refreshToken);
-      console.log('profile:', profile);
+      console.log('acces token : ', accessToken);
+      console.log('refresh token : ', refreshToken);
+      console.log('profile : ', profile);
     }
   )
 );
