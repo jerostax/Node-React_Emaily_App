@@ -10,11 +10,19 @@
 
 ## Server Setup <a name="server-setup"></a>
 
-### `npm init`
+### 1 - Init npm
 
-Created server folder and initialized npm inside of it. <br>
+Created server folder and initialized npm inside of it. 
+```
+  npm init
+```
 
-### Generate Express App
+### 2 - Generate Express App
+
+```
+  npm install --save express
+``` 
+### 3 - Require express and setup 
 
 Create index.js file in the project and add :
 
@@ -97,20 +105,20 @@ git push heroku master
 
 ## Google OAuth <a name="google"></a>
 
-### Passport Library <a name="passport"></a>
+### 1 - Passport Library <a name="passport"></a>
 
 We use [passport library](http://www.passportjs.org/packages/) to handle a part of the Google OAuth flow <br>
 
 - passport: General helpers for handling auth in Express apps
 - passport strategy: helpers for authenticating with one specific method (email/password, Google, Facebook...)
 
-#### Installation
+#### 1.1 - Installation
 
 ```
 npm install --save passport passport-google-oauth20
 ```
 
-#### Setup in index.js
+#### 1.2 - Setup in index.js
 
 Require passport and passport strategy (for google oauth)
 
