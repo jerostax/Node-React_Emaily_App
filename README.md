@@ -42,3 +42,10 @@ app.listen(PORT);
 ```js
 "start": "node index.js"
 ```
+
+### 4 - Install Heroku CLI in the project after commited it
+
+https://devcenter.heroku.com/articles/heroku-cli
+
+
+
