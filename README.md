@@ -12,6 +12,7 @@
    5. [OAuth Callbacks](#oauth-callbacks)
 4. [Nodemon](#nodemon)
 5. [Refacto Server Folder](#refacto-server)
+6. [MongoDB Setup](#mongodb-setup)
 
 ## 1 - Server Setup <a name="server-setup"></a>
 
@@ -46,11 +47,13 @@ app.get('/', (req, res) => {
 app.listen(5000);
 ```
 
+Here we require express in a const express that we pass into another const app and we create a route handler with app.get(). We also configure the app ton run on the port 5000
+
 ## 2 - Heroku deployment <a name="heroku"></a>
 
 ### 2.1 - PORT listening in index.js
 
-- config the PORT like so :
+- config the PORT like so that it can run both on heroku or localhost:
 
 ```js
 const PORT = process.env.PORT || 5000;
@@ -75,8 +78,9 @@ app.listen(PORT);
 ```js
 "start": "node index.js"
 ```
+### 2.4 - Create an account on heroku <a name="https://www.heroku.com"></a>
 
-### 2.4 - Git init in your project and add + commit
+### 2.5 - Git init in your project and add + commit
 
 - Initial GIT to the project so we can push to heroku later :
 
@@ -86,13 +90,13 @@ git add .
 git commit -m "initial commit"
 ```
 
-### 2.5 - Install Heroku CLI in the project after commited it
+### 2.6 - Install Heroku CLI in the project after commited it
 
 - Follow the steps in the link below :
 
 https://devcenter.heroku.com/articles/heroku-cli
 
-### 2.6 - Login to Heroku account
+### 2.7 - Login to Heroku account
 
 - On the terminal inside the project :
 
@@ -100,13 +104,13 @@ https://devcenter.heroku.com/articles/heroku-cli
 heroku login
 ```
 
-### 2.7 - Create a new Heroku app
+### 2.8 - Create a new Heroku app
 
 ```
 heroku create
 ```
 
-### 2.8 - Push on GIT
+### 2.9 - Push on GIT
 
 - Use the .git link provided in Heroku create command then :
 
@@ -115,13 +119,13 @@ git remote add heroku https://git.heroku.com/this-is-an-exemple.git
 git push heroku master
 ```
 
-### 2.9 - RE-Deploy
+### 2.10 - RE-Deploy
 
 - You only need to add, commit and push into the heroku master branch when you make changes :
 
 ```
 git add .
-git commit -m "un nouveau commit"
+git commit -m "another commit"
 git push heroku master
 ```
 
@@ -320,7 +324,7 @@ passport.use(
 
 ## 5 - Refacto server folder <a name="refacto-server"></a>
 
-### 5.1 routes folder
+### 5.1 - routes folder
 
 - Create a new folder called routes inside the server folder and create a file authRoutes.js inside of it
 - Cut & Paste the 2 routes handlers in the authRoutes.js file
@@ -343,9 +347,9 @@ passport.use(
 + };
 ```  
 
-### 5.2 services folder
+### 5.2 - services folder
 
-- Create anew folder called services inside the server folder and create a file passport.js inside of it
+- Create a new folder called services inside the server folder and create a file passport.js inside of it
 - Cut & Paste the passport configuration in the passport.js file
 - Add the passport, GoogleStrategy and keys require statement at the top like so :
 
@@ -354,11 +358,12 @@ passport.use(
   const GoogleStrategy = require('passport-google-oauth20').Strategy;
   const keys = require('./config/keys');
 ```
-- 
-### 5.3 index.js file
+
+### 5.3 - index.js file
 
 - We don't need passport, GoogleStrategy and keys anymore so delete the require statements
 - require the passport.js file like so :
+
 ```js
   require('./services/passport');
 ```   
@@ -369,3 +374,54 @@ passport.use(
 
 + require('./routes/authRoutes')(app);
 ```  
+## 6 - MongoDB Setup <a name="mongodb-setup"></a>
+
+### 6.1 Steps to setup MongoDB account and Atlas cluster for the project
+
+- Go to https://www.mongodb.com/cloud.atlas and click the "Start Free" button
+- Create your account
+- Leave all free tier options selected - AWS North America: N. Virginia etc (you can use europe location if it's closer).
+- Scrool down to name your app (cluster name)
+- Click the "Create Cluster" button and wait for installation to complete
+- Click the "CONNECT" button and click "Add your current IP address" button
+- Then create a database Username and Password (autogenerate recommanded, note the psw)
+- Then click the "Choose a connextion method" button
+- Select "Connect Your Application"
+- Copy the adress under "Connection String Only", you'll need to replace "<PASSWORD>"
+- Click the "Close" button and go back to your Emaily App
+- Crash your server and install mongoose like so :
+
+```js
+  npm install --save mongoose
+```
+- Require moongose in index.js file and connect it like so :
+
+```js
+  const express = require('express');
++ const mongoose = require('mongoose');
++ const keys = require('./config/keys');
+  require('./services/passport');
+
++ mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
+
+  const app = express();
+
+  require('./routes/authRoutes')(app);
+
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT);
+``` 
+
+- In config/keys.js file create the mongoURI key value pair like so :
+
+```js
+  module.exports = {
+    googleClientID:
+      'yourGoogleClientID',
+    googleClientSecret: 'yourGoogleClientSecret',
++   mongoURI: 'pasteTheAdressYouCopiedFromStringOnlyWithThePassword'
+  };
+``` 
+
+
+
