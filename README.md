@@ -19,6 +19,7 @@
     4. [Mongoose Queries](#mongoose-queries)
     5. [Generate Token for the user](#generate-token)
     6. [Test the authentification flow](#test-auth)
+    7. [Handle Logout User](#logout)
 
 ## 1 - Server Setup <a name="server-setup"></a>
 
@@ -662,7 +663,7 @@ note : maxAge is the cookie expiration, 30 days (with days, hours, minuts, secon
   app.use(passport.session());
 ```
 
-### 6.6 Test the authentification flow <a name="test-auth"></a>
+### 6.6 - Test the authentification flow <a name="test-auth"></a>
 
 - Create a new route handler in the authRoute file, we want the user as response : 
 
@@ -683,6 +684,19 @@ note : maxAge is the cookie expiration, 30 days (with days, hours, minuts, secon
   };
 ```
 
-- Now you can run the identification process in your browser again (you'll probably get an error like Cannot GET auth/google/callback but that's fine) and go to localhost:5000/api/current_user, you should see your datas 
+- Now you can run the identification process in your browser again (you'll probably get an error like Cannot GET auth/google/callback but that's fine) and go to http://localhost:5000/api/current_user, you should see your datas 
+
+### 6.7 - Handle Logout User <a name="logout"></a>
+
+- Create a new route handler to request logout() like so :
+
+```js
+  app.get('/api/logout', (req, res) => {
+      req.logout();
+      res.send(req.user);
+    });
+``` 
+
+- You can now go to http://localhost:5000/api/logout to log out !
 
 
