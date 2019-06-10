@@ -13,6 +13,7 @@
 4. [Nodemon](#nodemon)
 5. [Refacto Server Folder](#refacto-server)
 6. [MongoDB Setup](#mongodb-setup)
+7. [Create a mongoDB collection with mongoose Model Classes](#model-class)
 
 ## 1 - Server Setup <a name="server-setup"></a>
 
@@ -387,11 +388,11 @@ passport.use(
 - Then create a database Username and Password (autogenerate recommanded, note the psw)
 - Then click the "Choose a connextion method" button
 - Select "Connect Your Application"
-- Copy the adress under "Connection String Only", you'll need to replace "<PASSWORD>"
+- Copy the adress under "Connection String Only", you'll need to replace ` <PASSWORD> ` with your database password created earlier
 - Click the "Close" button and go back to your Emaily App
 - Crash your server and install mongoose like so :
 
-```js
+```
   npm install --save mongoose
 ```
 - Require moongose in index.js file and connect it like so :
@@ -423,5 +424,43 @@ passport.use(
   };
 ``` 
 
+- That's it! Now you can run your server back 
 
+## 7 - Create a mongoDB collection with mongoose Model Classes
+
+### 7.1 - models folder
+
+- Create a new folder called models in the server directory 
+- Create an User.js file inside the models folder
+
+### 7.2 Create a mongoose model class in User.js
+
+- first require mongoose and pull out mongoose's Schema property on top of the file 
+
+```js
+  const mongoose = require('mongoose');
+  const { Schema } = mongoose;
+```  
+
+note : could be const Schema = mongoose.Schema but we use the ES2015 syntaxe
+
+- Define the collection's properties with the Schema object and tell mongoose we want to create a new collection 'users' like so :
+
+```js
+  const userSchema = new Schema({
+    googleId: String
+  });
+
+  mongoose.model('users', userSchema);
+``` 
+
+- Require the User.js file in index.js like so :
+
+```js
+  const express = require('express');
+  const mongoose = require('mongoose');
+  const keys = require('./config/keys');
+  require('./services/passport');
++ require('./models/User');
+``` 
 
