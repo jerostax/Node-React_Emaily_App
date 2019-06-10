@@ -301,6 +301,18 @@ passport.use(
   npm install --save nodemon
 ``` 
 
-### 4.2 Setup nodemon
+### 4.2 - Setup nodemon
 
 - In package.json we add the script below in the scripts section :
+
+```js
+  "dev": "nodemon index.js"
+```
+
+### 4.3 - Start the server with nodemon
+
+- Just run the command below : 
+
+```
+ npm run dev
+```  
