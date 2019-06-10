@@ -1,6 +1,10 @@
 # Emaily App (Node with React Udemy Course @ Stephen Grider)
 
-## Server Setup
+#### Table of Contents
+1. [Server Setup] (#server-setup)
+2. [Heroku Deployment] (#heroku)
+
+## Server Setup <a name="server-steup"></a>
 
 ### `npm init`
 
@@ -21,7 +25,7 @@ app.get('/', (req, res) => {
 app.listen(5000);
 ```
 
-## Heroku deployment
+## Heroku deployment <a name="heroku"></a>
 
 ### 1 - PORT listening in index.js
 
@@ -86,3 +90,7 @@ git add .
 git commit -m "un nouveau commit"
 git push heroku master
 ```
+
+## Google OAuth
+
+
