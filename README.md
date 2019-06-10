@@ -15,6 +15,7 @@
 6. [MongoDB Setup](#mongodb-setup)
 7. [Create a mongoDB collection with mongoose Model Classes](#model-class)
 8. [Create a new User in your database with the Google flow](#create-user)
+9. [Mongoose Queries](#mongoose-queries)
 
 ## 1 - Server Setup <a name="server-setup"></a>
 
@@ -470,7 +471,7 @@ note : the order matters, we want to call User Model before we define it with pa
 
 ## 8 - Create a new User in your database with the Google flow <a name="create-user"></a>
 
-### Get acces to the mongoose model inside the google flow
+### 8.1 - Get acces to the mongoose model inside the google flow
 
 - Go in the passport.js file that contains the google flow 
 - first require the mongoose library and get acces to the User Model Class like so :
@@ -485,7 +486,7 @@ note : the order matters, we want to call User Model before we define it with pa
 ```
 note : now the User const is the user model class
 
-- Now we use the model class ton create a new instance of user and save it to the database (delete the 3 console.log in the GoogleStrategy):
+- Now we use the model class ton create a new instance of user and save it to the database (delete the 3 console.log in the GoogleStrategy) :
 
 ```js
   passport.use(
@@ -502,4 +503,54 @@ note : now the User const is the user model class
   );
 ``` 
 
-- Now you can run back your server, go to http://localhost:5000/auth/google and then check your mongoDB database that you created in mongoDB Atlas Cluster and you'll find your user collection with your Google Id
+- Now you can run back your server, go to http://localhost:5000/auth/google and then check your mongoDB database that you created in mongoDB Atlas Cluster and you'll find your user's collection with your Google's Id
+
+## 9 - Mongoose Queries <a name="mongoose-queries"></a>
+
+### 9.1 - Initiate query
+
+- We initiate a query (a search) to find if we already have the user in the collection in the GoogleStrategy callback fx
+
+```js 
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: keys.googleClientID,
+      clientSecret: keys.googleClientSecret,
+      callbackURL: '/auth/google/callback'
+    },
+    (accessToken, refreshToken, profile, done) => {
++     User.findOne({ googleId: profile.id })
+
+      new User({ googleId: profile.id }).save();
+    }
+  )
+);
+``` 
+- We make use of a promise to conditionnaly handle new user from existing users
+
+```js
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: keys.googleClientID,
+      clientSecret: keys.googleClientSecret,
+      callbackURL: '/auth/google/callback'
+    },
+    (accessToken, refreshToken, profile, done) => {
+      User.findOne({ googleId: profile.id })
++       .then((existingUser) => {
++         if (existingUser) {
++           // we already have a record with the given profile ID
++         } else {
+            // we don't have a user record with the given ID, create a new one
++           new User({ googleId: profile.id }).save();
++         }
++       })
+    }
+  )
+);
+```
+
+- That's it! now we handle existing users or new user in the database when we attempt to connect on our app
+
