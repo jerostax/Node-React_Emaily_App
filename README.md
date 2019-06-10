@@ -5,7 +5,7 @@
 1. [Server Setup](#server-setup)
 2. [Heroku Deployment](#heroku)
 3. [Google OAuth](#google)
-  1. [Passport Library](#passport)
+    1. [Passport Library](#passport)
 4. [MongoDB](#mongodb)
 
 ## Server Setup <a name="server-setup"></a>
