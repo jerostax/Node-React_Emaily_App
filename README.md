@@ -12,10 +12,12 @@
    5. [OAuth Callbacks](#oauth-callbacks)
 4. [Nodemon](#nodemon)
 5. [Refacto Server Folder](#refacto-server)
-6. [MongoDB Setup](#mongodb-setup)
-7. [Create a mongoDB collection with mongoose Model Classes](#model-class)
-8. [Create a new User in your database with the Google flow](#create-user)
-9. [Mongoose Queries](#mongoose-queries)
+6. [MongoDB]
+    1. [MongoDB Setup](#mongodb-setup)
+    2. [Create a mongoDB collection with mongoose Model Classes](#model-class)
+    3. [Create a new User in your database with the Google flow](#create-user)
+    4. [Mongoose Queries](#mongoose-queries)
+    5. [Generate Token for the user](#generate-token)
 
 ## 1 - Server Setup <a name="server-setup"></a>
 
@@ -377,9 +379,12 @@ passport.use(
 
 + require('./routes/authRoutes')(app);
 ```  
-## 6 - MongoDB Setup <a name="mongodb-setup"></a>
 
-### 6.1 Steps to setup MongoDB account and Atlas cluster for the project
+## 6 - MongoDB
+
+### 6.1 - MongoDB Setup <a name="mongodb-setup"></a>
+
+#### 6.1.1 Steps to setup MongoDB account and Atlas cluster for the project
 
 - Go to https://www.mongodb.com/cloud.atlas and click the "Start Free" button
 - Create your account
@@ -428,14 +433,14 @@ passport.use(
 
 - That's it! Now you can run your server back 
 
-## 7 - Create a mongoDB collection with mongoose Model Classes
+### 6.2 - Create a mongoDB collection with mongoose Model Classes
 
-### 7.1 - models folder
+#### 6.2.1 - models folder
 
 - Create a new folder called models in the server directory 
 - Create an User.js file inside the models folder
 
-### 7.2 - Create a mongoose model class in User.js
+#### 6.2.2 - Create a mongoose model class in User.js
 
 - first require mongoose and pull out mongoose's Schema property on top of the file 
 
@@ -469,9 +474,9 @@ note : the order matters, we want to call User Model before we define it with pa
 
 - That's it! we now have a new collection called users =)
 
-## 8 - Create a new User in your database with the Google flow <a name="create-user"></a>
+### 6.3 - Create a new User in your database with the Google flow <a name="create-user"></a>
 
-### 8.1 - Get acces to the mongoose model inside the google flow
+#### 8.3.1 - Get acces to the mongoose model inside the google flow
 
 - Go in the passport.js file that contains the google flow 
 - first require the mongoose library and get acces to the User Model Class like so :
@@ -505,9 +510,9 @@ note : now the User const is the user model class
 
 - Now you can run back your server, go to http://localhost:5000/auth/google and then check your mongoDB database that you created in mongoDB Atlas Cluster and you'll find your user's collection with your Google's Id
 
-## 9 - Mongoose Queries  and Passport Callbacks <a name="mongoose-queries"></a>
+### 6.4 - Mongoose Queries  and Passport Callbacks <a name="mongoose-queries"></a>
 
-### 9.1 - Initiate query
+#### 6.4.1 - Initiate query
 
 - We initiate a query (a search) to find if we already have the user in the collection in the GoogleStrategy callback fx
 
@@ -554,7 +559,7 @@ passport.use(
 
 - That's it! now we handle existing users from new user in the database when we attempt to connect on our app
 
-### 9.2 - Passport Callback
+#### 6.4.2 - Passport Callback
 
 - We now need to say to passport when we're done with the authentification flow with done() :
 
@@ -585,4 +590,17 @@ passport.use(
 ```
 
 note: first argument null = everything went fine, second argument the existingUser if the first case or the new user 'user' in the second case
+
+## 6.5 Generate a Token for the user <a name="generate-token"></a>
+
+### 6.5.1 Use serializeUser to generate a token in the passport file
+
+```js
+  passport.serializeUser((user, done) => {
+    done(null, user.id);
+  });
+``` 
+
+note: we pass user.id as a second argument (which is not the profile.id but the id property in our user collection in mongoDB)
+
 
