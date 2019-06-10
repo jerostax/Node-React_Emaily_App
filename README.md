@@ -15,7 +15,7 @@
 
 ### 1.1 - Init npm
 
-Created server folder and initialized npm inside of it.
+- Created server folder and initialized npm inside of it :
 
 ```
   npm init
@@ -23,13 +23,15 @@ Created server folder and initialized npm inside of it.
 
 ### 1.2 - Generate Express App
 
+- Install express with npm :
+
 ```
   npm install --save express
 ```
 
 ### 1.3 - Require express and setup
 
-Create index.js file in the project and add :
+- Create index.js file in the project and add :
 
 ```js
 const express = require('express');
@@ -46,12 +48,16 @@ app.listen(5000);
 
 ### 2.1 - PORT listening in index.js
 
+- config the PORT like so :
+
 ```js
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
 ```
 
 ### 2.2 - Specify Node and NPM version in package.json
+
+- in package.json right bellow "main" :
 
 ```js
  "engines": {
@@ -62,11 +68,15 @@ app.listen(PORT);
 
 ### 2.3 - Specify the start script in package.json
 
+- in the scripts section of package.json :
+
 ```js
 "start": "node index.js"
 ```
 
 ### 2.4 - Git init in your project and add + commit
+
+- Initial GIT to the project so we can push to heroku later :
 
 ```
 git init
@@ -76,11 +86,13 @@ git commit -m "initial commit"
 
 ### 2.5 - Install Heroku CLI in the project after commited it
 
+- Follow the steps in the link bellow :
+
 https://devcenter.heroku.com/articles/heroku-cli
 
 ### 2.6 - Login to Heroku account
 
-On the terminal inside the project :
+- On the terminal inside the project :
 
 ```
 heroku login
@@ -94,7 +106,7 @@ heroku create
 
 ### 2.8 - Push on GIT
 
-Use the .git link provided in Heroku create command then :
+- Use the .git link provided in Heroku create command then :
 
 ```
 git remote add heroku https://git.heroku.com/this-is-an-exemple.git
@@ -102,6 +114,8 @@ git push heroku master
 ```
 
 ### 2.9 - RE-Deploy
+
+- You only need to add, commit and push into the heroku master branch when you make changes :
 
 ```
 git add .
@@ -115,8 +129,8 @@ git push heroku master
 
 We use [passport library](http://www.passportjs.org/packages/) to handle a part of the Google OAuth flow <br>
 
-- passport: General helpers for handling auth in Express apps
-- passport strategy: helpers for authenticating with one specific method (email/password, Google, Facebook...)
+  - passport: General helpers for handling auth in Express apps
+  - passport strategy: helpers for authenticating with one specific method (email/password, Google, Facebook...)
 
 #### 3.1.1 - Installation
 
@@ -126,14 +140,14 @@ npm install --save passport passport-google-oauth20
 
 #### 3.1.2 - Setup in index.js
 
-Require passport and passport strategy (for google oauth)
+- Require passport and passport strategy (for google oauth) in index.js :
 
 ```js
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 ```
 
-Create a new instance of GoogleStrategy
+- Create a new instance of GoogleStrategy :
 
 ```js
 passport.use(new GoogleStrategy());
@@ -143,7 +157,7 @@ passport.use(new GoogleStrategy());
 
 #### 3.2.1 - Passport Google auth update
 
-Since passport-google-oauth20 2.0 version we don't need to enable Google+ api in the [google developer console](http://console.developers.google.com)
+- Since passport-google-oauth20 2.0 version we don't need to enable Google+ api in the [google developer console](http://console.developers.google.com) so make sure you run this command :
 
 ```
   npm install passport-google-oauth20@2 --save
@@ -164,7 +178,7 @@ Since passport-google-oauth20 2.0 version we don't need to enable Google+ api in
 #### 3.3.1 - Config folder
 
 - Create a config Folder and a keys.js file inside of it
-- Then add your api keys like so in keys.js:
+- Then add your api keys like so in keys.js :
 
 ```js
 module.exports = {
@@ -173,7 +187,7 @@ module.exports = {
 };
 ```
 
-- Then add keys.js to .gitignore file
+- Then add keys.js to .gitignore file to not push it on github
 
 ### 3.4 - Setup Google Strategy <a name="google-strategy"></a>
 
@@ -188,24 +202,26 @@ const keys = require('./config/keys');
 - We pass the keys to the GoogleStrategy as arguements :
 
 ```js
-passport.use(
-  new GoogleStrategy({
-  + clientID: keys.googleClientID,
-  + clientSecret: keys.googleClientSecret
-  })
-);
+  passport.use(
+    new GoogleStrategy({
+    + clientID: keys.googleClientID,
+    + clientSecret: keys.googleClientSecret
+    })
+  );
 ```
 
 #### 3.4.2 - Add a route handler
 
-- We add the callback URL as a third property in GoogleStrategy :
+- We add the callback URL as a third property of GoogleStrategy :
 
 ```js
-    passport.use(new GoogleStrategy({
-    clientID: keys.googleClientID,
-    clientSecret: keys.googleClientSecret,
-  + callbackURL: '/auth/google/callback'
-  }));
+    passport.use(
+      new GoogleStrategy({
+        clientID: keys.googleClientID,
+        clientSecret: keys.googleClientSecret,
+      + callbackURL: '/auth/google/callback'
+    })
+  );
 ```
 
 #### 3.4.3 - Add the accesToken arrow fx
