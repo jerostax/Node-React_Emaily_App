@@ -12,12 +12,13 @@
    5. [OAuth Callbacks](#oauth-callbacks)
 4. [Nodemon](#nodemon)
 5. [Refacto Server Folder](#refacto-server)
-6. [MongoDB]
+6. [MongoDB](#mongodb)
     1. [MongoDB Setup](#mongodb-setup)
     2. [Create a mongoDB collection with mongoose Model Classes](#model-class)
     3. [Create a new User in your database with the Google flow](#create-user)
     4. [Mongoose Queries](#mongoose-queries)
     5. [Generate Token for the user](#generate-token)
+    6. [Test the authentification flow](#test-auth)
 
 ## 1 - Server Setup <a name="server-setup"></a>
 
@@ -380,7 +381,7 @@ passport.use(
 + require('./routes/authRoutes')(app);
 ```  
 
-## 6 - MongoDB
+## 6 - MongoDB <a name="mongodb"></a>
 
 ### 6.1 - MongoDB Setup <a name="mongodb-setup"></a>
 
@@ -591,9 +592,9 @@ passport.use(
 
 note: first argument null = everything went fine, second argument the existingUser if the first case or the new user 'user' in the second case
 
-## 6.5 - Generate a Token for the user <a name="generate-token"></a>
+### 6.5 - Generate a Token for the user <a name="generate-token"></a>
 
-### 6.5.1 - Use serializeUser to generate a token in the passport file
+#### 6.5.1 - Use serializeUser to generate a token in the passport file
 
 ```js
   passport.serializeUser((user, done) => {
@@ -603,7 +604,7 @@ note: first argument null = everything went fine, second argument the existingUs
 
 note: we pass user.id as a second argument (which is not the profile.id but the id property in our user collection in mongoDB)
 
-### 6.5.2 - Use deserializeUser to find the user in the database
+#### 6.5.2 - Use deserializeUser to find the user in the database
 
 ```js
   passport.deserializeUser((id, done) => {
@@ -613,7 +614,7 @@ note: we pass user.id as a second argument (which is not the profile.id but the 
   });
 ``` 
 
-### 6.5.3 - Make sure passport is aware that we make use of cookies to keep track of the currently signed user
+#### 6.5.3 - Make sure passport is aware that we make use of cookies to keep track of the currently signed user
 
 - First install the library cookie-session like so :
 
@@ -647,7 +648,7 @@ note : maxAge is the cookie expiration, 30 days (with days, hours, minuts, secon
   module.exports = {
     googleClientID:
       'yourGoogleClientID',
-    googleClientSecret: 'your GoogleClientSecret',
+    googleClientSecret: 'yourGoogleClientSecret',
     mongoURI:
       'yourMongoDbUri',
 +   cookieKey: 'yourcookiekey'
@@ -661,6 +662,27 @@ note : maxAge is the cookie expiration, 30 days (with days, hours, minuts, secon
   app.use(passport.session());
 ```
 
+### 6.6 Test the authentification flow <a name="test-auth"></a>
 
+- Create a new route handler in the authRoute file, we want the user as response : 
+
+```js
+  module.exports = app => {
+    app.get(
+      '/auth/google',
+      passport.authenticate('google', {
+        scope: ['profile', 'email']
+      })
+    );
+
+    app.get('/auth/google/callback', passport.authenticate('google'));
+
++   app.get('/api/current_user', (req, res) => {
++     res.send(req.user);
++   });
+  };
+```
+
+- Now you can run the identification process in your browser again (you'll probably get an error like Cannot GET auth/google/callback but that's fine) and go to localhost:5000/api/current_user, you should see your datas 
 
 
