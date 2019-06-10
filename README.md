@@ -1,8 +1,8 @@
 # Emaily App (Node with React Udemy Course @ Stephen Grider)
 
 #### Table of Contents
-1. [Server Setup] (#server-setup)
-2. [Heroku Deployment] (#heroku)
+1. [Server Setup](#server-setup)
+2. [Heroku Deployment](#heroku)
 
 ## Server Setup <a name="server-steup"></a>
 
