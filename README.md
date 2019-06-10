@@ -43,9 +43,36 @@ app.listen(PORT);
 "start": "node index.js"
 ```
 
-### 4 - Install Heroku CLI in the project after commited it
+### 4 - Git init in your project and add + commit
+
+```
+git init
+git commit -m "initial commit"
+```
+
+### 5 - Install Heroku CLI in the project after commited it
 
 https://devcenter.heroku.com/articles/heroku-cli
 
+### 6 - Login to Heroku account
 
+On the terminal inside the project :
 
+```
+heroku login
+```
+
+### 7 - Create a new Heroku app
+
+```
+heroku create
+```
+
+### 8 - Push on GIT
+
+Use the .git link provided in Heroku create command then :
+
+```
+git remote add heroku https://git.heroku.com/this-is-an-exemple.git
+git push heroku master
+```
