@@ -635,7 +635,7 @@ note: we pass user.id as a second argument (which is not the profile.id but the 
 ```js
   app.use(
     cookieSession({
-      maxAge: 30 * 23 * 60 * 60 * 1000,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
       keys: [keys.cookieKey]
     })
   );
@@ -656,7 +656,7 @@ note : maxAge is the cookie expiration, 30 days (with days, hours, minuts, secon
   };
 ```
 
-- now we tell passport that it has to you cookies for authentification in index.js :
+- Now we tell passport that it has to use cookies for authentification in index.js :
 
 ```js
   app.use(passport.initialize());
