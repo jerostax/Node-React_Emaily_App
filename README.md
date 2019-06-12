@@ -20,6 +20,7 @@
     5. [Generate Token for the user](#generate-token)
     6. [Test the authentification flow](#test-auth)
     7. [Handle Logout User](#logout)
+  7. [Dev vs Prod environment](#dev-prod)
 
 ## 1 - Server Setup <a name="server-setup"></a>
 
@@ -698,5 +699,35 @@ note : maxAge is the cookie expiration, 30 days (with days, hours, minuts, secon
 ``` 
 
 - You can now go to http://localhost:5000/api/logout to log out !
+
+## 7 - Dev vs Prod environment <a name="dev-prod"></a>
+
+- We are going to create another a seperate production database for Heroku on MongoDB and 2 sets of keys in the project. This is usefull for api keys security.
+
+### 7.1 - Create another database on MongoDB Atlas
+
+- First Sign in to your MongoDB account
+- Then go to "Context" and under it click on the "New Project" link
+- Name your project (emaily-prod for exemple) and click the "Next" button then the "Create Project" one
+- Now click he "Build a Cluster" button
+- Leave the free tier options and click on "Create a CLuster"
+- After the Cluster has been succesfuly created, click the "Connect" button
+- Click "Add a Different IP Adress" button
+- Enter 0.0.0.0/0 in the IP Adress field and click "Add IP Adress"
+
+note: This part is extremely important as our Heroku server will not be able to connect to our database unless we whitelist all IP addresses. <br>
+In a real production app you would typically have a static IP and a Fully Qualified Domain Name. In this case we would whitelist only the static IP. You can read up on this more here:
+
+https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-address-ranges-in-use-at-heroku
+
+- Enter a new Username, generate a secure password and click "Create MongoDB User"
+- Click the "Choose a Connection Method" then select "Connect Your Application"
+- Copy the address under "Connection String Only" (remember you'll have to change the `<PASSWORD>`with the database user's actual password generated few steps ago), then click the "Close" button
+
+
+### 7.2 - Separate in 2 sets of keys 
+
+
+
 
 
