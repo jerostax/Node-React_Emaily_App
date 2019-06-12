@@ -737,17 +737,31 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
 
 ### 7.2 - Separate in 2 sets of keys 
 
-- Create a new file dev.js inside the Config file
-- Cut & Paste the keys from the keys.js file inside of the new dev.js file (add the dev.js file to .gitignore)
+- Create 2 new files dev.js and prod.js inside the Config file
+- Dev mode : Cut & Paste the keys from the keys.js file inside of the new dev.js file (add the dev.js file to .gitignore) 
 - In the file keys.js we're going to define the logic to know which set of keys we use (prod or dev) like so :
 
 ```js
   if (process.env.NODE_ENV === 'production') {
     //we are in production - return the prod set of keys
+    module.exports = require('./prod');
   }else {
-    // we are in development - return the dev keyus
+    // we are in development - return the dev keys
+    module.exports = require('./dev');
   }
 ```
+
+- Prod mode: Copy & paste the code of the dev.js file into the prod.js file and replace the keys by the following code :
+
+```js
+  module.exports = {
+    googleClientID:  process.env.GOOGLE_CLIENT_ID,
+    googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    mongoURI: process.ENV.MONGO_URI,
+    cookieKey: process.env.COOKIE_KEY
+  };
+```
+
 
 
 
