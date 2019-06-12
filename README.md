@@ -704,7 +704,7 @@ note : maxAge is the cookie expiration, 30 days (with days, hours, minuts, secon
 
 - We are going to create another a seperate production database for Heroku on MongoDB and 2 sets of keys in the project. This is usefull for api keys security.
 
-### 7.1 - Create another database on MongoDB Atlas
+### 7.1 - Create another database on MongoDB Atlas & a second project in the Google dev console
 
 - First Sign in to your MongoDB account
 - Then go to "Context" and under it click on the "New Project" link
@@ -722,11 +722,32 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
 
 - Enter a new Username, generate a secure password and click "Create MongoDB User"
 - Click the "Choose a Connection Method" then select "Connect Your Application"
-- Copy the address under "Connection String Only" (remember you'll have to change the `<PASSWORD>`with the database user's actual password generated few steps ago), then click the "Close" button
+- Copy the address under "Connection String Only" (remember you'll have to change the `<PASSWORD>` with the database user's actual password generated few steps ago), then click the "Close" button
 
+- Now you can create a new project "emaily-prod" in the console.developers.google.com to generate a new Google OAuth ClientID and ClientSecret credential but this time you can fullfield the Configure consent screen better since it's gonna be our prod project. (Make sure you name the product "Emaily" and not "emaily-prod")
+
+- Once you set the Configure consent screen, go back to your terminal, kill the server and type the command below to open your heroku address on your browser :
+
+```
+  heroku open
+``` 
+
+- Copy the address and paste it into the Authorized JavaScript field without the "/" in the end (make sure you allow this address in the Configure consent screen)
+- then passed the same addresse into the Authorized redirect URIs with the route "/auth/google" the click the "Create" button
 
 ### 7.2 - Separate in 2 sets of keys 
 
+- Create a new file dev.js inside the Config file
+- Cut & Paste the keys from the keys.js file inside of the new dev.js file (add the dev.js file to .gitignore)
+- In the file keys.js we're going to define the logic to know which set of keys we use (prod or dev) like so :
+
+```js
+  if (process.env.NODE_ENV === 'production') {
+    //we are in production - return the prod set of keys
+  }else {
+    // we are in development - return the dev keyus
+  }
+```
 
 
 
