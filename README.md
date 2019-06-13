@@ -837,9 +837,13 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
 
 - Now you can start back your App by running the command " npm run dev ", this will run both server and client =) !
 
-### 8.3 - Quick setup to avoid Proxy errors with create-react-app 2.0 or higher
+### 8.3 - Routing Stumbling block 
 
-- You need to install the package below in the client directory :
+- We need to find a way that our routes work both on the localhost and heroku server
+
+- You need to do Quick setup to avoid Proxy errors with create-react-app 2.0 or higher
+
+- Install the package below in the client directory :
 
 ```
   npm install http-proxy-middleware --save
@@ -856,7 +860,12 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
 ``` 
 
 - That should be ok to fix the proxy errors
+
 - Also think to add another Authorized redirect UIRs in your emaily-dev google console project for the client side like so :
 
   http://localhost:3000/auth/google/callback
+
+
+
+
 
