@@ -22,6 +22,7 @@
     6. [Test the authentification flow](#test-auth)
     7. [Handle Logout User](#logout)
   7. [Dev vs Prod environment](#dev-prod)
+  8. [Client Side Setup](#client-setup)
 
 ## 1 - Server Setup <a name="server-setup"></a>
 
@@ -770,7 +771,7 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
 - Next to "Config var" click the "Reveal Config vars" 
 - Now you setup all the Env variables for our App in the KEY and VALUE fields (add the key + value one by one, ex: GOOGLE_CLIENT_ID as key and yourGoogleClientKey as value, then click the "Add" button)
 - You can now go back to your terminal and add/commit/push your project on the heroku git repo and go back to your browser to check if your heroku url app works
-- You should have a redirect_uri_mismatch error when going to https://yourherokuurl.herokuapp.com/auth/google dur to the "http" (and not https) redirection
+- You should have a redirect_uri_mismatch error when going to https://yourherokuurl.herokuapp.com/auth/google due to the "http" (and not https) redirection
 
 ### 7.4 - Fix the redirection issue
 
@@ -804,7 +805,36 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
 
 - You can now push the changes on Heroku GIT repo and go back to your browser to test it out, everything should be fine now!
 
+## 8 - Client Side Setup <a name="client-setup"></a>
 
+### 8.1 - Generate a React App
 
+- Inside the server directory :
+
+```
+ create-react-app client
+```
+
+### 8.2 - Run the Server and Client at the same time
+
+- in the server directory go to the package.json file
+- In the script section, rename the actual dev command as "server" and add the 2 new command for the client and both server + client like so:
+
+```js
+  "scripts": {
+      "start": "node index.js",
++-    "server": "nodemon index.js",
++     "client": "npm run start --prefix client",
++     "dev": "concurrently \"npm run server\" \"npm run client \""
+    }
+```
+
+- Now we need to install concurrently in the terminal with the following command :
+
+```
+  npm install --save concurrently
+``` 
+
+- Now you can start back your App by running the command " npm run dev ", this will run both server and client =) !
 
 
