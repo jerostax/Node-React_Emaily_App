@@ -774,7 +774,7 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
 
 ### 7.4 - Fix the redirection issue
 
-- We need to add another property to handle the callbackURL in the GoogleStrategy to handle on Heroku (by saying to GoogleStrategy that if our request runs through any proxy, that's fine trust the proxy and calculate the callback url) like so :
+- We need to add another property to handle the callbackURL in the GoogleStrategy to handle on Heroku (by saying to GoogleStrategy that if our request runs through any proxy, trust the proxy and calculate the callback url) like so :
 
 ```js 
   passport.use(
@@ -801,6 +801,8 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
     )
   );
 ``` 
+
+- You can now push the changes on Heroku GIT repo and go back to your browser to test it out, everything should be fine now!
 
 
 
