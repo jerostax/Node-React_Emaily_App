@@ -1,4 +1,5 @@
-# Emaily App (Node with React Udemy Course @ Stephen Grider)
+# Emaily App 
+(Node with React Udemy Course @ Stephen Grider)
 
 ## Table of Contents
 
@@ -751,7 +752,7 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
   }
 ```
 
-- Prod mode: Copy & paste the code of the dev.js file into the prod.js file and replace the keys by the following code :
+- Prod mode: Copy & paste the code of the dev.js file into the prod.js file and replace the keys by Env variables like so :
 
 ```js
   module.exports = {
@@ -762,6 +763,12 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
   };
 ```
 
+### 7.3 - Setup Env variable in Heroku
+
+- Go to your Heroku dashboard and select your app
+- Then click on the "settings" button
+- Next to "Config var" click the "Reveal Config vars" 
+- Now you setup all the Env variables for our App in the KEY and VALUE fields (add the key + value one by one, ex: GOOGLE_CLIENT_ID as key and yourGoogleClientKey as value, then click the "Add" button)
 
 
 
