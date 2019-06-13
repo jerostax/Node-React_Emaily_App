@@ -739,7 +739,7 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
 ### 7.2 - Separate in 2 sets of keys 
 
 - Create 2 new files dev.js and prod.js inside the Config file
-- Dev mode : Cut & Paste the keys from the keys.js file inside of the new dev.js file (add the dev.js file to .gitignore) 
+- Dev mode : Cut & Paste the keys from the keys.js file inside of the new dev.js file (add the dev.js file to .gitignore and remove the keys.js file from it) 
 - In the file keys.js we're going to define the logic to know which set of keys we use (prod or dev) like so :
 
 ```js
@@ -758,7 +758,7 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
   module.exports = {
     googleClientID:  process.env.GOOGLE_CLIENT_ID,
     googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    mongoURI: process.ENV.MONGO_URI,
+    mongoURI: process.env.MONGO_URI,
     cookieKey: process.env.COOKIE_KEY
   };
 ```
@@ -769,6 +769,39 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
 - Then click on the "settings" button
 - Next to "Config var" click the "Reveal Config vars" 
 - Now you setup all the Env variables for our App in the KEY and VALUE fields (add the key + value one by one, ex: GOOGLE_CLIENT_ID as key and yourGoogleClientKey as value, then click the "Add" button)
+- You can now go back to your terminal and add/commit/push your project on the heroku git repo and go back to your browser to check if your heroku url app works
+- You should have a redirect_uri_mismatch error when going to https://yourherokuurl.herokuapp.com/auth/google dur to the "http" (and not https) redirection
+
+### 7.4 - Fix the redirection issue
+
+- We need to add another property to handle the callbackURL in the GoogleStrategy to handle on Heroku (by saying to GoogleStrategy that if our request runs through any proxy, that's fine trust the proxy and calculate the callback url) like so :
+
+```js 
+  passport.use(
+    new GoogleStrategy(
+      {
+        clientID: keys.googleClientID,
+        clientSecret: keys.googleClientSecret,
+        callbackURL: '/auth/google/callback',
++       proxy: true
+      },
+      (accessToken, refreshToken, profile, done) => {
+        User.findOne({ googleId: profile.id }).then(existingUser => {
+          if (existingUser) {
+            // we already have a record with the given profile ID
+            done(null, existingUser);
+          } else {
+            // we don't have a user record with the given ID, create a new one
+            new User({ googleId: profile.id })
+              .save()
+              .then(user => done(null, user));
+          }
+        });
+      }
+    )
+  );
+``` 
+
 
 
 
