@@ -1,5 +1,4 @@
-# Emaily App 
-(Node with React Udemy Course @ Stephen Grider)
+# Emaily App (Node with React Udemy Course @ Stephen Grider)
 
 ## Table of Contents
 
