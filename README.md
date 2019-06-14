@@ -23,6 +23,7 @@
     7. [Handle Logout User](#logout)
   7. [Dev vs Prod environment](#dev-prod)
   8. [Client Side Setup](#client-setup)
+  9. [Dev the Client Side](#dev-client)
 
 ## 1 - Server Setup <a name="server-setup"></a>
 
@@ -864,6 +865,12 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
 - Also think to add another Authorized redirect URIs in your emaily-dev google console project for the client side like so :
 
   http://localhost:3000/auth/google/callback
+
+
+## 9 - Dev the Client Side
+
+
+
 
 
 
