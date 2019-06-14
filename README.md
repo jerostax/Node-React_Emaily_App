@@ -24,6 +24,8 @@
   7. [Dev vs Prod environment](#dev-prod)
   8. [Client Side Setup](#client-setup)
   9. [Dev the Client Side](#dev-client)
+      1. [Refacto with Async Await](#async-await)
+      2. [React Setup](#react-setup)
 
 ## 1 - Server Setup <a name="server-setup"></a>
 
@@ -867,9 +869,11 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
   http://localhost:3000/auth/google/callback
 
 
-## 9 - Dev the Client Side
+## 9 - Dev the Client Side <a name="dev-client"></a>
 
-### 9.1 - Refacto the promises with the async await syntaxe 
+- First we're gonna do a little refacto in the back-end then setup/dev Client Side with React
+
+### 9.1 - Refacto the promises with the async await syntaxe <a name="async-await">
 
 - Check async-await.js file in the addiotional-doc folder to know more about it
 - We refacto the GoogleStrategy promise in the passport.js file like so :
@@ -899,6 +903,42 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
 ``` 
 
 note: We also refacto a little bit the if statement by adding a return key word that will automatically stop the instruction if it's called so we don't need the else statement anymore =)
+
+
+### 9.2 - React Setup <a name="setup-react"></a>
+
+- Let's now install some dependencies such as redux and react-router like so :
+
+``` 
+  npm install --save redux react-redux react-router-dom
+``` 
+
+- Now we setup our src folder pattern by deleting all the files inside of it exept the setupProxy.js and the serviceWorker.js and create a new index.js file with the code below :
+
+```js 
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './components/App';
+
+ReactDOM.render(<App />, document.querySelector('#root'));
+```  
+
+note: here we import React, ReactDOM and the App component that we're going to create, then we render the App component inside the div with the id "root" in the index.html file which is in the public directory.
+
+- Now it's time to create our components folder where we will have all of our components inside the src directory, then create the App.js file inside of it and code it as a simple functionnal component for now like so :
+
+```js
+import React from 'react';
+
+const App = () => {
+  return <div>App</div>;
+};
+
+export default App;
+```  
+
+note: we can create functionnal or class based components, in both cases we will import react and export the component, also the code below the return statement is what the component will show on the screen.
+
 
 
 
