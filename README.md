@@ -26,6 +26,7 @@
   9. [Dev the Client Side](#dev-client)
       1. [Refacto with Async Await](#async-await)
       2. [React Setup](#react-setup)
+      3. [Redux Setup](#redux-setup)
 
 ## 1 - Server Setup <a name="server-setup"></a>
 
@@ -939,13 +940,53 @@ export default App;
 
 note: we can create functionnal or class based components, in both cases we will import react and export the component, also the code below the return statement is what the component will show on the screen.
 
+### 9.3 - Redux Setup <a name="redux-setup"></a>
 
+We are going to use reducers to record whether or not the user is logged in and a list of all surveys that the user has created
 
+#### 9.3.1 - How does Redux works :
 
+Redux Store : This is where all of our state exists <br>
 
+To determine our current state or to update it we call an action creator which dispatches an action. <br>
 
+The action is sent to all the different reducers (the reducers are combined together with combineReducers call that is use to update the state in our Redux Store)
 
+- In the end we can see it that way : <br>
 
+A React component calls an Action Creator that returns an Action that will be sent to the Reducers which will update the State inside of our Redux Store. In the end the updated State will be sent back to the component that will rerender and display new content on the screen.
 
+#### 9.3.2 - How to setup Redux
 
+- Inside of our index.js file we will create our Redux Store and render a Provider tag
+- The Provider tag is a React component provided to us by the react-redux library that makes the store accessible to every component in the app
 
+Let's code this !
+
+- First we import de Provider tag and the createStore, applyMiddleware helpers like so :
+
+```js 
+  import { Provider } from 'react-redux';
+  import { createStore, applyMiddleware } from 'redux';
+``` 
+
+- Now its time to create the store like so :
+
+```js
+  const store = createStore(() => [], {}, applyMiddleware());
+```
+
+note : the first argument is our reducers (for now we create an useless reducer to not leave it empty), the second argument is the initial state of our Application (not really usefull for our app so for now we pass an empty object), finally the third argument is the applyMiddleware call.
+
+- Now we need to wrap the App component with the Provider tag like so :
+
+```js
+  ReactDOM.render(
+    <Provider store={store}>
+      <App />
+    </Provider>,
+    document.querySelector('#root')
+  );
+```  
+
+note : we pass the store as a prop inside the Provider tag
