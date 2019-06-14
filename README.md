@@ -876,7 +876,7 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
 
 ### 9.1 - Refacto the promises with the async await syntaxe <a name="async-await">
 
-- Check async-await.js file in the addiotional-doc folder to know more about it
+- Check async-await.js file in the additional-doc folder to know more about it
 - We refacto the GoogleStrategy promise in the passport.js file like so :
 
 ```js
@@ -950,11 +950,11 @@ Redux Store : This is where all of our state exists <br>
 
 To determine our current state or to update it we call an action creator which dispatches an action. <br>
 
-The action is sent to all the different reducers (the reducers are combined together with combineReducers call that is use to update the state in our Redux Store)
+The action is sent to all the different reducers (the reducers are combined together with **combineReducers** call that is use to update the state in our Redux Store)
 
 - In the end we can see it that way : <br>
 
-A React component calls an Action Creator that returns an Action that will be sent to the Reducers which will update the State inside of our Redux Store. In the end the updated State will be sent back to the component that will rerender and display new content on the screen.
+A React component calls an **Action Creator** that returns an **Action** that will be sent to the **Reducers** which will update the **State** inside of our **Redux Store**. In the end the updated **State** will be sent back to the component that will rerender and display new content on the screen.
 
 #### 9.3.2 - How to setup Redux
 
@@ -970,13 +970,13 @@ Let's code this !
   import { createStore, applyMiddleware } from 'redux';
 ``` 
 
-- Now its time to create the store like so :
+- Now it's time to create the store like so :
 
 ```js
   const store = createStore(() => [], {}, applyMiddleware());
 ```
 
-note : the first argument is our reducers (for now we create an useless reducer to not leave it empty), the second argument is the initial state of our Application (not really usefull for our app so for now we pass an empty object), finally the third argument is the applyMiddleware call.
+note : The first argument is our reducers (for now we create a useless reducer to not leave it empty), the second argument is the initial state of our Application (not really usefull for our app so for now we pass an empty object), finally the third argument is the applyMiddleware call.
 
 - Now we need to wrap the App component with the Provider tag like so :
 
@@ -989,4 +989,40 @@ note : the first argument is our reducers (for now we create an useless reducer 
   );
 ```  
 
-note : we pass the store as a prop inside the Provider tag
+note : We pass the store as a prop inside the Provider tag
+
+- Now let's create our Auth Reducer, first for the sake of our src folder pattern, we're going to create a reducers folder inside of it. In the reducers folder we now create an authReducer.js file and index.js file 
+
+- Inside the authReducer.js file we're going to create our reducer and export it like so :
+
+```js
+export default function(state = {}, action) {
+  switch (action.type) {
+    default:
+      return state;
+  }
+}
+``` 
+
+note: The first argument is the State object that is responsable for this reducer and the second argument is the Action object, then we define the switch statement where we will define the differents cases (as default case, we return the state with no changes)
+
+- Now let's go to our index.js file inside the reducers directory to import our brand new reducer :
+
+```js
+import { combineReducers } from 'redux';
+import authReducer from './authReducer';
+
+export default combineReducers({
+  auth: authReducer
+});
+``` 
+
+note: We import the combineReducers where we will call all our different reducers that we will pass a value of a key that we define like auth (key) : authReducer (value)
+
+- Last but not least, we now need to import the combineReducers in our main index.js file and pass it as the first argument of our store :
+
+```js
++  import reducers from './reducers'
+
++- const store = createStore(reducers, {}, applyMiddleware());
+```
