@@ -869,6 +869,39 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
 
 ## 9 - Dev the Client Side
 
+### 9.1 - Refacto the promises with the async await syntaxe 
+
+- Check async-await.js file in the addiotional-doc folder to know more about it
+- We refacto the GoogleStrategy promise in the passport.js file like so :
+
+```js
+  passport.use(
+    new GoogleStrategy(
+      {
+        clientID: keys.googleClientID,
+        clientSecret: keys.googleClientSecret,
+        callbackURL: '/auth/google/callback',
+        proxy: true
+      },
++-    async (accessToken, refreshToken, profile, done) => {
++-      const existingUser = await User.findOne({ googleId: profile.id });
+        if (existingUser) {
+          // we already have a record with the given profile ID
++-        return done(null, existingUser);
+        }
+        // we don't have a user record with the given ID, create a new one
++-      const user = await new User({ googleId: profile.id }).save();
++-      done(null, user);
+      }
+    )
+  );
+
+``` 
+
+note: We also refacto a little bit the if statement by adding a return key word that will automatically stop the instruction if it's called so we don't need the else statement anymore =)
+
+
+
 
 
 
