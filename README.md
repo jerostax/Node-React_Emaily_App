@@ -861,7 +861,7 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
 
 - That should be ok to fix the proxy errors
 
-- Also think to add another Authorized redirect UIRs in your emaily-dev google console project for the client side like so :
+- Also think to add another Authorized redirect URIs in your emaily-dev google console project for the client side like so :
 
   http://localhost:3000/auth/google/callback
 
