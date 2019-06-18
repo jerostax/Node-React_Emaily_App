@@ -29,6 +29,7 @@
       3. [Redux Setup](#redux-setup)
       4. [React Router Setup](#router-setup)
       5. [Design](#design)
+      6. [Current User API](#user-api)
 
 ## 1 - Server Setup <a name="server-setup"></a>
 
@@ -1087,7 +1088,7 @@ note: We pass the keyword "exact" (could have write exact={true} but here we use
 
 - Time to add some CSS/Design to our App, I'm not gonna cover in great details assuming you already now CSS.
 
-#### 9.2 - Materialize CSS
+#### 9.5.1 - Materialize CSS
 
 - We are going to use the [Materialize CSS library](https://materializecss.com/getting-started.html), in my case i'm gonna use the npm package but you can definetely only use the CDN link tag :
 
@@ -1103,7 +1104,7 @@ note: We pass the keyword "exact" (could have write exact={true} but here we use
 
 note: we don't specify a relative path because webpack is gonna automatically assume that it's a npm package of our node_modules directory that way
 
-#### 9.5.2 - Header
+#### 9.5.2 - User
 
 - Let's now make our Header Component as a class based component in the components directory and import it in the App.js file to replace the dummy Header component that we did before and design it with some Materialize CSS classes like so :
 
@@ -1126,7 +1127,44 @@ note: we don't specify a relative path because webpack is gonna automatically as
   }
 ``` 
 
+### 9.6 - Current User API <a name="user-api"></a">
 
+- We now need to figure out whether or not the user is logged in  to render the appropriate buttons in the Header
+- On the server side, in the routes file, we're gonna use the "/api/current_user" route to decide if wheter or not the user is connected by doing an Ajax request
 
+- The React App boots up -> App component calls an **action creator** (redux) -> this action Creator will make an **API request** (with the **axios** library to do the Ajax request to the "/api/current_user" route) to the back-end to ask whether or not the current user is logged in -> then we're going to get a response back presumably containing the user if he's logged in -> with that response we're gonna use another library **redux-thunk** to dispatch an action off to all the different **reducers** of our app -> the action which contains whether or not the user is logged in is then send to the **authReducer** -> the authReducer will be then responsable for looking at that action and update the state to say whether or not the user is logged in -> then with the updated state we're gonna update the content inside our Header by setting up the Header to communicate with our **Redux Store**.
 
+- First we install the axios and redux-thunk library :
+
+``` 
+  npm install --save axios redux-thunk
+``` 
+
+- Now import the redux-thunk and hook it up to the createStore as a middleware :
+
+```js
++  import reduxThunk from 'redux-thunk';
+
++- const store = createStore(reducers, {}, applyMiddleware(reduxThunk));
+``` 
+
+- Now let's make the Action Creator, first create a new folder named "actions" inside the src directory (where we will code all of our actions creators)
+- Now create an index.js file inside of the actions folder where we're gonna code our first action creator even if we will refacto it later :
+
+```js 
+  import axios from 'axios';
+  import { FETCH_USER } from './types';
+
+  const fetchUser = () => {
+    axios.get('/api/current_user')
+  };
+``` 
+
+note: we first import the axios library to handle the Ajax request and the FETCH_USER action type (we will create the action types right after in a seperate file). Then we define our action creator (fetchUser) and inside we do our Ajax request using axios to get the /api/current_user route
+
+- We define our action types in another file in the actions folder, name it types.js :
+
+```js
+  export const FETCH_USER = 'fetch_user';
+```
 
