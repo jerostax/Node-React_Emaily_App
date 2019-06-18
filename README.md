@@ -27,6 +27,8 @@
       1. [Refacto with Async Await](#async-await)
       2. [React Setup](#react-setup)
       3. [Redux Setup](#redux-setup)
+      4. [React Router Setup](#router-setup)
+      5. [Design](#design)
 
 ## 1 - Server Setup <a name="server-setup"></a>
 
@@ -1026,3 +1028,70 @@ note: We import the combineReducers where we will call all our different reducer
 
 +- const store = createStore(reducers, {}, applyMiddleware());
 ```
+
+### - 9.4 React Router Setup <a name="router-setup"></a>
+
+- We're gonna use React Router to render different contents based on the route that the user is visiting
+
+- All the configuration is gonna be in the App.js file so we first need to import react-router-dom inside of it :
+
+```js
+  import { BrowserRouter, Route } from 'react-router-dom';
+``` 
+
+note: The BrowserRouter object is what tells react how to behave by looking at the current URL and change the set of components visible on the screen. The Route object is a React Component that is used to setup a rule between a route that the user can visite and a set of component that will be visible on the screen.
+
+- Now e're going to create 4 dummy components (Header, Dashboard, SurveyNew, Landing) that will be replace later with our real components to setup React-router in the App.js file :
+
+```js
+  const Header = () => <h2>Header</h2>
+  const Dashboard = () => <h2>Dashboard</h2>
+  const SurveyNew = () => <h2>SurveyNew</h2>
+  const Landing = () => <h2>Landing</h2>
+```  
+
+- Let's now use BrowserRouter and Router inside of the App.js return statement (clean the "App" text before) and define our first route for the landing component :
+
+```js
+  const App = () => {
+    return (
+      <div>
++       <BrowserRouter>
++       <div>
++         <Route  path="/" component={Landing} />
++       </div>
++       </BrowserRouter>
++     </div>
+    );
+  };
+```
+
+note : We define all the possibles routes with the Route object. The BrowserObject accept only 1 child component at most so make sure you wrapp your components inside of a single div tag
+
+- Now time to setup the others routes :
+
+```js
+  <BrowserRouter>
+    <div>
++     <Header />
++-    <Route exact path="/" component={Landing} />
++     <Route exact path="/surveys" component={Dashboard} />
++     <Route path="/surveys/new" component={SurveyNew} />
+    </div>
+  </BrowserRouter>
+```
+
+note: We pass the keyword "exact" (could have write exact={true} but here we use the JSX syntaxe that assumes exact is true) to the "Landing" route to say that it only renders on the "/" route, otherwise it would render on every routes since they all start with a "/" (same operation for the Dashboard component that we only want to render in the /"surveys" route and not on the "/surveys/new" route). Also we want the Header on every routes so we cant juste call the component by itself on top of the routes !
+
+### 9.5 - Design <a name="design"></a>
+
+- Time to add some CSS/Design to our App, I'm not gonna cover in great details assuming you already now CSS.
+
+#### 9.5.1 - Header
+
+- Let's now make our Header Component as a class based component in the components directory and import it in the App.js file to replace the dummy Header component that we did before.
+
+
+
+
+
