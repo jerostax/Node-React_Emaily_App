@@ -1087,7 +1087,23 @@ note: We pass the keyword "exact" (could have write exact={true} but here we use
 
 - Time to add some CSS/Design to our App, I'm not gonna cover in great details assuming you already now CSS.
 
-#### 9.5.1 - Header
+#### 9.2 - Materialize CSS
+
+- We are going to use the [Materialize CSS library](https://materializecss.com/getting-started.html), in my case i'm gonna use the npm package but you can definetely only use the CDN link tag :
+
+```
+  npm install --save materialize-css
+``` 
+
+- To use it we simply have to do an import statement in the index.js file with the good path like so (check the path in the .node_module file) :
+
+```js
+  import 'materialize-css/dist/css/materialize.min.css';
+```
+
+note: we don't specify a relative path because webpack is gonna automatically assume that it's a npm package of our node_modules directory that way
+
+#### 9.5.2 - Header
 
 - Let's now make our Header Component as a class based component in the components directory and import it in the App.js file to replace the dummy Header component that we did before.
 
