@@ -1105,7 +1105,26 @@ note: we don't specify a relative path because webpack is gonna automatically as
 
 #### 9.5.2 - Header
 
-- Let's now make our Header Component as a class based component in the components directory and import it in the App.js file to replace the dummy Header component that we did before.
+- Let's now make our Header Component as a class based component in the components directory and import it in the App.js file to replace the dummy Header component that we did before and design it with some Materialize CSS classes like so :
+
+```js
+  class Header extends React.Component {
+    render() {
+      return (
+        <nav>
+          <div className='nav-wrapper'>
+            <a className='left brand-logo'>Emaily</a>
+            <ul className='right'>
+              <li>
+                <a href='sass.html'>Sign Up With Google</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      );
+    }
+  }
+``` 
 
 
 
