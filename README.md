@@ -1355,3 +1355,17 @@ note: We add an arrow fx which is where the request is sent to after the passpor
 - Now we can create our Landing component instead of the dummy one that we created in the App.js file
 - Here you can do a simple functionnal component and some title such as "Emaily" in a h1 tag and whatever you want to say in this "marketing" page
 - Also don't forget to import your new Landing component in the App.js and delete the dummy one
+
+- Now let's take care of the links tag inside of the app with the React Router Link tag
+- First import the Link component in the Header component and change the "a" tag arround the Emaily text with a Link tag that conditionaly navigates to the "/surveys" route if we're logged in or the "/" homepage route if we're logged out :
+
+```js
+import { Link } from 'react-router-dom';
+
+<Link
+  to={this.props.auth ? '/surveys' : '/'}
+  className='left brand-logo'
+>
+    Emaily
+</Link>
+```
