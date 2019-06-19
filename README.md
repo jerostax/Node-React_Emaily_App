@@ -1117,7 +1117,7 @@ note: we don't specify a relative path because webpack is gonna automatically as
             <a className='left brand-logo'>Emaily</a>
             <ul className='right'>
               <li>
-                <a href='sass.html'>Sign Up With Google</a>
+                <a>Sign Up With Google</a>
               </li>
             </ul>
           </div>
@@ -1352,4 +1352,6 @@ note: We add an arrow fx which is where the request is sent to after the passpor
     });
 ```
 
-
+- Now we can create our Landing component instead of the dummy one that we created in the App.js file
+- Here you can do a simple functionnal component and some title such as "Emaily" in a h1 tag and whatever you want to say in this "marketing" page
+- Also don't forget to import your new Landing component in the App.js and delete the dummy one
