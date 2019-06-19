@@ -1342,6 +1342,14 @@ function mapStateToProps(state) {
 
 note: We add an arrow fx which is where the request is sent to after the passport authenticate middleware is executed
 
-- Let's now handle the logout redirection :
+- Let's now handle the logout redirection, remember we need to unset the cookie to logout
+- First add the href to the logout "a" tag inside the header to go on the route "/api/logout" and then we just have to redirect the user to the "/" landing page in the authRoute.js file like so (don't forget to delete the res.send reponse that is useless since it's empty) :
+
+```js
+  app.get('/api/logout', (req, res) => {
+      req.logout();
++-    res.redirect('/');
+    });
+```
 
 
