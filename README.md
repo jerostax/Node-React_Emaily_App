@@ -1155,7 +1155,7 @@ note: we don't specify a relative path because webpack is gonna automatically as
   import axios from 'axios';
   import { FETCH_USER } from './types';
 
-  const fetchUser = () => {
+  export const fetchUser = () => {
     axios.get('/api/current_user');
   };
 ``` 
@@ -1172,7 +1172,7 @@ note: we first import the axios library to handle the Ajax request and the FETCH
 - Now let's complete our action creator (we will refacto later) :
 
 ```js
-  const fetchUser = () => {
+  export const fetchUser = () => {
 +   return function(dispatch) {
       axios
         .get('/api/current_user')
@@ -1209,3 +1209,42 @@ note: Here we now return a function, thanks to the Redux Thunk middleware, it's 
 ``` 
 
 note: we use the componentDidMount() lifecycle method to fetch the current user
+
+- Now we're going to hook up our App component to our redux store with the connect helper function
+- We first import the connect helper from the react-redux library then we import our actions creators like so :
+
+```js
+  import { connect } from 'react-redux';
+  import * as actions from '../actions';
+``` 
+
+- Let's not add the connect function to the export default of our App component :
+
+```js
+  export default connect(
+    null,
+    actions
+  )(App);
+```
+note : The first argument is the mapStateToProps function (but we don't use it so we pass null), in the second argument we pass all the actions creators that we want to wire up
+
+- Now the actions creators are props of the App component so let's call them in the componentDidMount() lifecycle method :
+
+```js
+  componentDidMount() {
++     this.props.fetchUser();
+    }
+``` 
+- Now we need to make sure it works by adding a console log in the authReducer like so:
+
+```js
+  export default function(state = {}, action) {
++   console.log(action);
+    switch (action.type) {
+      default:
+        return state;
+    }
+  }
+``` 
+
+note : Refresh the browser, you should see 4 console logs. The first 3 are part of the redux boot up process, so we only care about the 4th one which tell us wheter or not the user is logged in. The payload Object is the axios response object with all the different properties. The data property communicates back the actual json that the server sent to us. We now know that redux-thunk works correcty (we made the request to our back end server and after it was completed we dispatched an action which was sent to all of our reducers).

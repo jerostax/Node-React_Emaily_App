@@ -8,7 +8,7 @@ class Header extends React.Component {
           <a className='left brand-logo'>Emaily</a>
           <ul className='right'>
             <li>
-              <a href='sass.html'>Sign Up With Google</a>
+              <a>Sign Up With Google</a>
             </li>
           </ul>
         </div>
