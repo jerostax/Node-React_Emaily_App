@@ -1254,8 +1254,32 @@ note : Refresh the browser, you should see 4 console logs. The first 3 are part 
 ```js
 +-export const fetchUser = () => async dispatch => {
 +-  const res = await axios.get('/api/current_user');
-+-  dispatch({ type: FETCH_USER, payload: res });
++-  dispatch({ type: FETCH_USER, payload: res.data });
 +-};
 ``` 
 
+- Now we need to make sure that our action gets picked up inside of our authReducer, just before we're gonna do a little change to our response because we only want the data property :
+
+```js
+  export const fetchUser = () => async dispatch => {
+    const res = await axios.get('/api/current_user');
++   dispatch({ type: FETCH_USER, payload: res.data });
+  };
+```
+
+- Now we need to import the fetchUser action type to our authReducer and set another switch case statement :
+
+```js
++-export default function(state = null, action) {
+    switch (action.type) {
++     case FETCH_USER:
++       return action.payload || false;
+      default:
+        return state;
+    }
+  }
+```
+
+note: "null" => we don't know yet if the user is logged in or not / "User model" (actually the data property which is the payload object, yes the user is logged in) => object with the user's id
+ / "false" => no, the user isn't logged in
 
