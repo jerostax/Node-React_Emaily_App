@@ -1283,3 +1283,65 @@ note : Refresh the browser, you should see 4 console logs. The first 3 are part 
 note: "null" => we don't know yet if the user is logged in or not / "User model" (actually the data property which is the payload object, yes the user is logged in) => object with the user's id
  / "false" => no, the user isn't logged in
 
+- Time to make sure that the Header component is aware of whether or not the user is logged in using the auth state
+- First we connect the Header to the reducers like we did before then we define our mapStateToProps function which contains the entire state object out of the redux store :
+
+```js
++ import { connect } from 'react-redux';
+
++ function mapStateToProps({ auth }) {
++   return { auth };
++ }
+
++-export default connect(mapStateToProps)(Header);
+``` 
+
+note: we use the ES6 syntaxe but the mapStateToProps could be like that :
+
+```js
+function mapStateToProps(state) {
+  return { auth: state.auth };
+}
+``` 
+- Now we need to use the auth property to decide what content to show on the Header
+- Let's create a helper method that we call renderContent with a switch statement to render the appropriate content if we're logged in or not (don't forget to replace the actual li tag that has the "Sign Up With Google" with the `{this.renderContent()}`method) :
+
+```js
+  renderContent() {
+      switch (this.props.auth) {
+        case null:
+          return;
+        case false:
+          return (
+            <li>
+              <a href='/auth/google'>Sign Up With Google</a>
+            </li>
+          );
+        default:
+          return (
+            <li>
+              <a>Logout</a>
+            </li>
+          );
+      }
+    }
+```
+
+- Now we have to handle the redirection after we logged in 
+- First let's go back to our server's authRoutes.js file and add some redirection to the auth/google/callback route :
+
+```js
+  app.get(
+      '/auth/google/callback',
+      passport.authenticate('google'),
++     (req, res) => {
++       res.redirect('/surveys');
++     }
+    );
+```
+
+note: We add an arrow fx which is where the request is sent to after the passport authenticate middleware is executed
+
+- Let's now handle the logout redirection :
+
+
