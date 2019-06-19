@@ -1169,7 +1169,6 @@ note: we first import the axios library to handle the Ajax request and the FETCH
 ```
 
 - Redux-Thunk : Gives us direct access to the dispatch function to manually dispatch an anction at point in time from an action creator
-
 - Now let's complete our action creator (we will refacto later) :
 
 ```js
@@ -1182,5 +1181,31 @@ note: we first import the axios library to handle the Ajax request and the FETCH
   };
 ``` 
 
-
 note: Here we now return a function, thanks to the Redux Thunk middleware, it's gonna inspect whatever value is inside the action creator and if it sees that we return a function instead of a normal action it's gonna automatically call the function pass the dispatch function as an argument to it. In the end we say that we want to dispatch a function after the request has been succesfully completed (when we have the response from the API).
+
+- Now we want to add this action creator to our App component to make sure that when our app boot up we fetch the current user
+- For that we need to refacto the App component as a class based component that we can make use of the lifecycle method for the action creator to be automatically called when the app renders to the screen :
+
+```js
++-class App extends React.Component {
++   componentDidMount() {
++      
++   }
++   render() {
+      return (
+        <div className='container'>
+          <BrowserRouter>
+            <div>
+              <Header />
+              <Route exact path='/' component={Landing} />
+              <Route exact path='/surveys' component={Dashboard} />
+              <Route path='/surveys/new' component={SurveyNew} />
+            </div>
+          </BrowserRouter>
+        </div>
+      );
++   }
+  }
+``` 
+
+note: we use the componentDidMount() lifecycle method to fetch the current user
