@@ -1218,7 +1218,7 @@ note: we use the componentDidMount() lifecycle method to fetch the current user
   import * as actions from '../actions';
 ``` 
 
-- Let's not add the connect function to the export default of our App component :
+- Let's now add the connect function to the export default of our App component :
 
 ```js
   export default connect(
@@ -1248,3 +1248,14 @@ note : The first argument is the mapStateToProps function (but we don't use it s
 ``` 
 
 note : Refresh the browser, you should see 4 console logs. The first 3 are part of the redux boot up process, so we only care about the 4th one which tell us wheter or not the user is logged in. The payload Object is the axios response object with all the different properties. The data property communicates back the actual json that the server sent to us. We now know that redux-thunk works correcty (we made the request to our back end server and after it was completed we dispatched an action which was sent to all of our reducers).
+
+- Now that it's working correctly, let's refacto the fetchUser action creator with the async/await syntaxe and arrow fx instead of function keyword :
+
+```js
++-export const fetchUser = () => async dispatch => {
++-  const res = await axios.get('/api/current_user');
++-  dispatch({ type: FETCH_USER, payload: res });
++-};
+``` 
+
+
