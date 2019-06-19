@@ -1127,7 +1127,7 @@ note: we don't specify a relative path because webpack is gonna automatically as
   }
 ``` 
 
-### 9.6 - Current User API <a name="user-api"></a">
+### 9.6 - Current User API <a name="user-api"></a>
 
 - We now need to figure out whether or not the user is logged in  to render the appropriate buttons in the Header
 - On the server side, in the routes file, we're gonna use the "/api/current_user" route to decide if wheter or not the user is connected by doing an Ajax request
@@ -1156,11 +1156,11 @@ note: we don't specify a relative path because webpack is gonna automatically as
   import { FETCH_USER } from './types';
 
   const fetchUser = () => {
-    axios.get('/api/current_user')
+    axios.get('/api/current_user');
   };
 ``` 
 
-note: we first import the axios library to handle the Ajax request and the FETCH_USER action type (we will create the action types right after in a seperate file). Then we define our action creator (fetchUser) and inside we do our Ajax request using axios to get the /api/current_user route
+note: we first import the axios library to handle the Ajax request and the FETCH_USER action type (we will create the action types right after in a seperate file). Then we define our action creator (fetchUser) and inside we do our Ajax request using axios to get the "/api/current_user" route
 
 - We define our action types in another file in the actions folder, name it types.js :
 
@@ -1168,3 +1168,19 @@ note: we first import the axios library to handle the Ajax request and the FETCH
   export const FETCH_USER = 'fetch_user';
 ```
 
+- Redux-Thunk : Gives us direct access to the dispatch function to manually dispatch an anction at point in time from an action creator
+
+- Now let's complete our action creator (we will refacto later) :
+
+```js
+  const fetchUser = () => {
++   return function(dispatch) {
+      axios
+        .get('/api/current_user')
++       .then(res => dispatch({ type: FETCH_USER, payload: res }));
++   };
+  };
+``` 
+
+
+note: Here we now return a function, thanks to the Redux Thunk middleware, it's gonna inspect whatever value is inside the action creator and if it sees that we return a function instead of a normal action it's gonna automatically call the function pass the dispatch function as an argument to it. In the end we say that we want to dispatch a function after the request has been succesfully completed (when we have the response from the API).
