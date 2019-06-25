@@ -1498,3 +1498,17 @@ note: the prop amount is the amount of money that we want to request from the us
 ```
 
 - Now we want to style the button and we can do that by adding a button as a child component of the StripeCheckout compo.
+
+### 10.3 - Send stripe Token to our API
+
+- First let's create a new action creator handleToken, let's st rt with the actions/index.js file :
+
+```js
+  export const handleToken = token => async dispatch => {
+    const res = await axios.post('/api/stripe', token);
+
+    dispatch({ type: FETCH_USER, payload: res.data });
+  };
+```
+note: Here we want to do a post request to the backend server because we want to send the information to it (we havent define the route handler yet but it's gonna be /api/stripe)
+
