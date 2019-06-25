@@ -1472,3 +1472,29 @@ note: the prop amount is the amount of money that we want to request from the us
           ];
  ```
 
+- Now we can fix the console log warning by adding a key prop to our li tags like so :
+
+```js
+  [
++-  <li key="1">
+      <Payments />
+    </li>,
++-  <li key="2">
+      <a href='/api/logout'>Logout</a>
+    </li>
+  ];
+```
+
+- And custom our payment window like so :
+
+```js
+  <StripeCheckout
++   name='Emaily'
++   description='$5 for 5 email credits'
+    amount={500}
+    token={token => console.log(token)}
+    stripeKey={process.env.REACT_APP_STRIPE_KEY}
+  />
+```
+
+- Now we want to style the button and we can do that by adding a button as a child component of the StripeCheckout compo.
