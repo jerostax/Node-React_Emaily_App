@@ -1421,4 +1421,12 @@ module.exports = {
 
 #### 10.1.2 - Client side
 
+- Inside the client directory create those 2 new files : .env.development and .env/production
+
+- Now add the publishable key in both files like so :
+
+```
+REACT_APP_STRIPE_KEY=yourpublishablekey
+``` 
+note: don't wrapp the key with quotes here
 
