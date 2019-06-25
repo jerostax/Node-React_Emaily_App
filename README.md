@@ -1372,7 +1372,7 @@ import { Link } from 'react-router-dom';
 </Link>
 ```
 
-## 10 - Handling Payments with Stripe <a name="payment"></a>
+## 10 - Handling Payments with Stripe <a name="payments"></a>
 
 - We're gonna use the billing company Stripe
 
@@ -1556,5 +1556,9 @@ note: Here we want to do a post request to the backend server because we want to
 + require('./routes/billingRoutes')(app);
 ``` 
 
-- Now we're going to install an npm module that we use for our server side to help work with the Stripe API 
+- Now we're going to install an npm module that we use for our server side to help work with the Stripe API :
+
+```
+  npm install --save stripe
+``` 
 
