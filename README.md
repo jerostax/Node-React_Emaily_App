@@ -1512,3 +1512,4 @@ note: the prop amount is the amount of money that we want to request from the us
 ```
 note: Here we want to do a post request to the backend server because we want to send the information to it (we havent define the route handler yet but it's gonna be /api/stripe)
 
+- Now let's make sure it get called whenever we got a token from the stripe checkout form. In the Payments.js component, import connect and all the actions, then wire up the connect helper and finaly update the token arrow fx to call our action creator
