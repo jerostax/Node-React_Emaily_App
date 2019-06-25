@@ -21,15 +21,17 @@
     5. [Generate Token for the user](#generate-token)
     6. [Test the authentification flow](#test-auth)
     7. [Handle Logout User](#logout)
-  7. [Dev vs Prod environment](#dev-prod)
-  8. [Client Side Setup](#client-setup)
-  9. [Dev the Client Side](#dev-client)
-      1. [Refacto with Async Await](#async-await)
-      2. [React Setup](#react-setup)
-      3. [Redux Setup](#redux-setup)
-      4. [React Router Setup](#router-setup)
-      5. [Design](#design)
-      6. [Current User API](#user-api)
+7. [Dev vs Prod environment](#dev-prod)
+8. [Client Side Setup](#client-setup)
+9. [Dev the Client Side](#dev-client)
+    1. [Refacto with Async Await](#async-await)
+    2. [React Setup](#react-setup)
+    3. [Redux Setup](#redux-setup)
+    4. [React Router Setup](#router-setup)
+    5. [Design](#design)
+    6. [Current User API](#user-api)
+10. [Handling Payments with Stripe](#payments)
+  
 
 ## 1 - Server Setup <a name="server-setup"></a>
 
@@ -1369,3 +1371,54 @@ import { Link } from 'react-router-dom';
     Emaily
 </Link>
 ```
+
+## 10 - Handling Payments with Stripe <a name="payment"></a>
+
+- We're gonna use the billing company Stripe
+
+### 10.1 - Stripe API
+
+- First you need to Sign Up to [Stripe](https://www.stripe.com)
+- Once you're done, stay with the test mode and go to "Get your test API keys"
+- Now we need to install the Stripe pluging that we're going to use to accept credit cards with a credit card form but we're gonna use [react-stripe-react](https://github.com/azmenak/react-stripe-checkout) instead of the stripe's checkout.js library and install with a npm package in the client directory :
+
+```
+  npm install --save react-stripe-checkout
+``` 
+
+- Let's now put the publishable key and secret key on our client and server side.
+
+#### 10.1.1 - Server side
+
+- First copy the publishable key and the secret key, then add it to your dev.js like :
+
+```js
+  module.exports = {
+    googleClientID:
+      'yourkey',
+    googleClientSecret: 'yourkey',
+    mongoURI:
+      'yourkey',
+    cookieKey: 'yourkey',
++   stripePublishableKey: 'yourkey',
++   stripeSecretKey: 'yourkey'
+  };
+```
+- Now let's add they key for the prod.js file like so:
+
+```js
+module.exports = {
+    googleClientID:  process.env.GOOGLE_CLIENT_ID,
+    googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    mongoURI: process.env.MONGO_URI,
+    cookieKey: process.env.COOKIE_KEY,
++   stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
++   stripeSecretKey: process.env.STRIPE_SECRET_KEY
+  };
+``` 
+
+- Now let's set up in the heroku environement, go to your heroku dashbord and add the 2 new variables for the 2 keys
+
+#### 10.1.2 - Client side
+
+
