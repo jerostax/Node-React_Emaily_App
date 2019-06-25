@@ -1430,3 +1430,45 @@ REACT_APP_STRIPE_KEY=yourpublishablekey
 ``` 
 note: don't wrapp the key with quotes here
 
+### 10.2 - Payment Component
+
+- Let's now create our payment component that will be accessible with the 'Add Credit' button in the header
+- First create a new component called Payments.js and make it a class based component like so :
+
+```js
+  import React from 'react';
+  import StripeCheckout from 'react-stripe-checkout';
+
+  class Payments extends React.Component {
+    render() {
+      return <StripeCheckout />;
+    }
+  }
+  export default Payments;
+``` 
+note: we import Stripe Checkout and return it but we need to add some config now
+
+- Now we need to add a few required properties to our StripeCheckout compo :
+
+```js
+  <StripeCheckout
+    amount={500}
+    token={token => console.log(token)}
+    stripeKey={process.env.REACT_APP_STRIPE_KEY}
+  />
+``` 
+note: the prop amount is the amount of money that we want to request from the user (the amount is in dollar and cents, so 500 cents = 5 dollars, we could chose another currency). The token prop is the call back token provided by stripe that represent the transaction
+
+- Now just import the Payments compo in the Header one and show it in the header in the case that the user is logged in :
+
+ ```js
++- return [
++           <li>
++             <Payments />
++           </li>,
+            <li>
+              <a href='/api/logout'>Logout</a>
+            </li>
+          ];
+ ```
+
