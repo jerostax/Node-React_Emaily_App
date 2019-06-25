@@ -1512,4 +1512,49 @@ note: the prop amount is the amount of money that we want to request from the us
 ```
 note: Here we want to do a post request to the backend server because we want to send the information to it (we havent define the route handler yet but it's gonna be /api/stripe)
 
-- Now let's make sure it get called whenever we got a token from the stripe checkout form. In the Payments.js component, import connect and all the actions, then wire up the connect helper and finaly update the token arrow fx to call our action creator
+- Now let's make sure it get called whenever we got a token from the stripe checkout form. In the Payments.js component, import connect and all the actions, then wire up the connect helper and finaly update the token arrow fx to call our action creator :
+
+```js
++ import { connect } from 'react-redux';
++ import * as actions from '../actions';
+
+  class Payments extends React.Component {
+    render() {
+      return (
+        <StripeCheckout
+          name='Emaily'
+          description='$5 for 5 email credits'
+          amount={500}
++-        token={token => this.props.handleToken(token)}
+          stripeKey={process.env.REACT_APP_STRIPE_KEY}
+        >
+          <button className='btn'>Add Credits</button>
+        </StripeCheckout>
+      );
+    }
+  }
++-export default connect(
++   null,
++   actions
++ )(Payments);
+```
+
+- Now we need to create the route handler in the routes directory to receive the token (we will do that in a new file billingRoutes.js) :
+
+```js
+  module.export = app => {
+    app.post('/api/tripe', (req, res) => {
+      
+    });
+  };
+```
+
+- Don't forget to require the file in the index.js file of your server :
+
+```js
+  require('./routes/authRoutes')(app);
++ require('./routes/billingRoutes')(app);
+``` 
+
+- Now we're going to install an npm module that we use for our server side to help work with the Stripe API 
+
