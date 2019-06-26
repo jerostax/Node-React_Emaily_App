@@ -1543,7 +1543,7 @@ note: Here we want to do a post request to the backend server because we want to
 
 ```js
   module.export = app => {
-    app.post('/api/tripe', (req, res) => {
+    app.post('/api/stripe', (req, res) => {
       
     });
   };
@@ -1561,4 +1561,28 @@ note: Here we want to do a post request to the backend server because we want to
 ```
   npm install --save stripe
 ``` 
+
+- Let's now import stripe in the billingRoutes.js file and the Stripe Secret key :
+
+```js
+  const keys = require('../config/keys');
+  const stripe = require('stripe')(keys.stripeSecretKey);
+``` 
+note: we pass the key as a second set of parentheses like the stripe's document ask so
+
+- Now we have an issue because express doesn't parse the request payload that contains the stripe token, to solve that issue we can install another npm modul in the server directory that will tell express to parse the request body and make it available to everything inside of our app (the modul is body-parser) :
+
+```
+  npm install --save bnody-parser
+```  
+
+- Now let's require that modul in the index.js file and use it :
+
+```js
+  const bodyParser = require('body-parser');
+
+  app.use(bodyParser.json());
+``` 
+
+note: app.use(bodyParser.json()) above all first app.use that we coded before
 
