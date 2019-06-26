@@ -1600,3 +1600,18 @@ note: app.use(bodyParser.json()) above all first app.use that we coded before
     });
   };
 ``` 
+- Now we can console log the returned promese and refacto with the async/await syntaxe :
+
+```js
+  module.exports = app => {
++-  app.post('/api/stripe', async (req, res) => {
++-    const charge = await stripe.charges.create({
+        amount: 500,
+        currency: 'usd',
+        description: '$5 for 5 credits',
+        source: req.body.id
+      });
++     console.log(charge);
+    });
+  };
+``` 
