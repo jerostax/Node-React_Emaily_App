@@ -1542,7 +1542,7 @@ note: Here we want to do a post request to the backend server because we want to
 - Now we need to create the route handler in the routes directory to receive the token (we will do that in a new file billingRoutes.js) :
 
 ```js
-  module.export = app => {
+  module.exports = app => {
     app.post('/api/stripe', (req, res) => {
       
     });
@@ -1586,3 +1586,17 @@ note: we pass the key as a second set of parentheses like the stripe's document 
 
 note: app.use(bodyParser.json()) above all first app.use that we coded before
 
+- Let's create a [charge object](https://stripe.com/docs/api/charges/create) to credit and bill the credit card in the billingRoutes.js file :
+
+```js
+  module.exports = app => {
+    app.post('/api/stripe', (req, res) => {
++     stripe.charges.create({
++       amount: 500,
++       currency: 'usd',
++       description: '$5 for 5 credits',
++       source: req.body.id
++     })
+    });
+  };
+``` 
