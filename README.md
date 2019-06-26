@@ -1600,7 +1600,7 @@ note: app.use(bodyParser.json()) above all first app.use that we coded before
     });
   };
 ``` 
-- Now we can console log the returned promese and refacto with the async/await syntaxe :
+- Now we can console log the returned promise and refacto with the async/await syntaxe :
 
 ```js
   module.exports = app => {
@@ -1612,6 +1612,37 @@ note: app.use(bodyParser.json()) above all first app.use that we coded before
         source: req.body.id
       });
 +     console.log(charge);
+    });
+  };
+``` 
+- Now we need to give credits to the user when the payment was successfuly done 
+- First we need to add another property to our User model :
+
+```js
+  const userSchema = new Schema({
+    googleId: String,
+    name: String,
+=   credits: { type: Number, default: 0 }
+  });
+``` 
+
+note: here we pass a default value of 0 and specify it's a number
+
+- Now let's take the user model to add credits and send the user model back to the client side with the request response :
+
+```js
+  module.exports = app => {
+    app.post('/api/stripe', async (req, res) => {
+      const charge = await stripe.charges.create({
+        amount: 500,
+        currency: 'usd',
+        description: '$5 for 5 credits',
+        source: req.body.id
+      });
++     req.user.credits += 5;
++     const user = await req.user.save();
+
++     res.send(user);
     });
   };
 ``` 
