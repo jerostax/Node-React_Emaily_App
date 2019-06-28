@@ -1646,6 +1646,7 @@ note: here we pass a default value of 0 and specify it's a number
     });
   };
 ``` 
+### 10.4 - Requiring Authentification with a middleware 
 
 - Next we need to make sure that the user is logged in before we add credits or bill any credit card. We can make sure of that by using a new middleware that will verify if the user is logged in 
 - We are going to centralize our middlewares in a new directory that we call middlewares
@@ -1662,7 +1663,7 @@ note: here we pass a default value of 0 and specify it's a number
 ``` 
 
 
-note: the argument "next" is a callback fx that we call when our middleware is complete. Here we say that if the user isn't logged in the send back the response with the of status 401 which means forbidden, and if he's logged in the go to the "next()" middleware.
+note: the argument "next" is a callback fx that we call when our middleware is complete. Here we say that if the user isn't logged in then send back the response with the of status 401 which means forbidden, and if he's logged in then go to the "next()" middleware.
 
 - Now we need to wire up this middleware to the route handler billingRoutes "/api/stripe" like so:
 
@@ -1684,5 +1685,23 @@ note: the argument "next" is a callback fx that we call when our middleware is c
     });
   };
 ``` 
+
+### 10.5 - Display Credit Quandtity
+
+- Now let's display our credits to the client side inside our Header component :
+
+```js
+  return [
+            <li key="1">
+              <Payments />
+            </li>,
++           <li key="2" style={{ margin:'0 10px'}}>
++             Credits : {this.props.auth.credits}
++           </li>,
+            <li key="3">
+              <a href='/api/logout'>Logout</a>
+            </li>
+          ];
+```
 
 
