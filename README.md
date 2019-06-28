@@ -1646,3 +1646,43 @@ note: here we pass a default value of 0 and specify it's a number
     });
   };
 ``` 
+
+- Next we need to make sure that the user is logged in before we add credits or bill any credit card. We can make sure of that by using a new middleware that will verify if the user is logged in 
+- We are going to centralize our middlewares in a new directory that we call middlewares
+- Inside of it, create a new file named "requireLogin.js" and create our middleware :
+
+```js
+  module.exports = (req, res, next) => {
+    if (!req.user) {
+      return res.status(401).send({ error: 'You must log in !' });
+    }
+
+    next();
+  };
+``` 
+
+
+note: the argument "next" is a callback fx that we call when our middleware is complete. Here we say that if the user isn't logged in the send back the response with the of status 401 which means forbidden, and if he's logged in the go to the "next()" middleware.
+
+- Now we need to wire up this middleware to the route handler billingRoutes "/api/stripe" like so:
+
+```js
++ const requireLogin = require('../middlewares/requireLogin');
+
+  module.exports = app => {
++-  app.post('/api/stripe', requireLogin, async (req, res) => {
+      const charge = await stripe.charges.create({
+        amount: 500,
+        currency: 'usd',
+        description: '$5 for 5 credits',
+        source: req.body.id
+      });
+      req.user.credits += 5;
+      const user = await req.user.save();
+
+      res.send(user);
+    });
+  };
+``` 
+
+
