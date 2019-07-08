@@ -1,4 +1,5 @@
-# Emaily App 
+# Emaily App
+
 (Node with React Udemy Course @ Stephen Grider)
 
 ## Table of Contents
@@ -14,24 +15,24 @@
 4. [Nodemon](#nodemon)
 5. [Refacto Server Folder](#refacto-server)
 6. [MongoDB](#mongodb)
-    1. [MongoDB Setup](#mongodb-setup)
-    2. [Create a mongoDB collection with mongoose Model Classes](#model-class)
-    3. [Create a new User in your database with the Google flow](#create-user)
-    4. [Mongoose Queries](#mongoose-queries)
-    5. [Generate Token for the user](#generate-token)
-    6. [Test the authentification flow](#test-auth)
-    7. [Handle Logout User](#logout)
+   1. [MongoDB Setup](#mongodb-setup)
+   2. [Create a mongoDB collection with mongoose Model Classes](#model-class)
+   3. [Create a new User in your database with the Google flow](#create-user)
+   4. [Mongoose Queries](#mongoose-queries)
+   5. [Generate Token for the user](#generate-token)
+   6. [Test the authentification flow](#test-auth)
+   7. [Handle Logout User](#logout)
 7. [Dev vs Prod environment](#dev-prod)
 8. [Client Side Setup](#client-setup)
 9. [Dev the Client Side](#dev-client)
-    1. [Refacto with Async Await](#async-await)
-    2. [React Setup](#react-setup)
-    3. [Redux Setup](#redux-setup)
-    4. [React Router Setup](#router-setup)
-    5. [Design](#design)
-    6. [Current User API](#user-api)
+   1. [Refacto with Async Await](#async-await)
+   2. [React Setup](#react-setup)
+   3. [Redux Setup](#redux-setup)
+   4. [React Router Setup](#router-setup)
+   5. [Design](#design)
+   6. [Current User API](#user-api)
 10. [Handling Payments with Stripe](#payments)
-  
+11. [Back End to Front End Routing in Prod](#routing-prod)
 
 ## 1 - Server Setup <a name="server-setup"></a>
 
@@ -97,6 +98,7 @@ app.listen(PORT);
 ```js
 "start": "node index.js"
 ```
+
 ### 2.4 - Create an account on heroku <a name="https://www.heroku.com"></a>
 
 ### 2.5 - Git init in your project and add + commit
@@ -154,8 +156,8 @@ git push heroku master
 
 We use [passport library](http://www.passportjs.org/packages/) to handle a part of the Google OAuth flow <br>
 
-  - passport: General helpers for handling auth in Express apps
-  - passport strategy: helpers for authenticating with one specific method (email/password, Google, Facebook...)
+- passport: General helpers for handling auth in Express apps
+- passport strategy: helpers for authenticating with one specific method (email/password, Google, Facebook...)
 
 #### 3.1.1 - Installation
 
@@ -267,19 +269,20 @@ const keys = require('./config/keys');
     )
   );
 ```
-#### 3.4.4 - Add a route handler
 
+#### 3.4.4 - Add a route handler
 
 - Add the code below to tell express to handle the path we want with passport :
 
 ```js
-  app.get(
-    '/auth/google',
-    passport.authenticate('google', {
-      scope: ['profile', 'email']
-    })
-  );
-``` 
+app.get(
+  '/auth/google',
+  passport.authenticate('google', {
+    scope: ['profile', 'email']
+  })
+);
+```
+
 The scope specify to google what acces we want to have in the user's account (profile, email here)
 
 #### 3.4.5 - Test if it works
@@ -293,7 +296,7 @@ The scope specify to google what acces we want to have in the user's account (pr
 - we create a second route handler in our index.js to handle AOuth callbacks when we click to authentificate with Google :
 
 ```js
-  app.get('/auth/google/callback', passport.authenticate('google'));
+app.get('/auth/google/callback', passport.authenticate('google'));
 ```
 
 #### 3.5.2 - Console log accesToken / refreshToken / profile / done
@@ -315,7 +318,7 @@ passport.use(
     }
   )
 );
-``` 
+```
 
 ## 4 - Nodemon <a name="nodemon"></a>
 
@@ -323,7 +326,7 @@ passport.use(
 
 ```
   npm install --save nodemon
-``` 
+```
 
 ### 4.2 - Setup nodemon
 
@@ -335,11 +338,11 @@ passport.use(
 
 ### 4.3 - Start the server with nodemon
 
-- Just run the command below : 
+- Just run the command below :
 
 ```
  npm run dev
-```  
+```
 
 ## 5 - Refacto server folder <a name="refacto-server"></a>
 
@@ -350,9 +353,11 @@ passport.use(
 - Add the passport require statement at the top like so :
 
 ```js
-  const passport = require('passport');
-``` 
+const passport = require('passport');
+```
+
 - Export the routes handlers like so :
+
 ```js
 + module.exports = app => {
     app.get(
@@ -364,7 +369,7 @@ passport.use(
 
     app.get('/auth/google/callback', passport.authenticate('google'));
 + };
-```  
+```
 
 ### 5.2 - services folder
 
@@ -373,9 +378,9 @@ passport.use(
 - Add the passport, GoogleStrategy and keys require statement at the top like so :
 
 ```js
-  const passport = require('passport');
-  const GoogleStrategy = require('passport-google-oauth20').Strategy;
-  const keys = require('./config/keys');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const keys = require('./config/keys');
 ```
 
 ### 5.3 - index.js file
@@ -384,15 +389,16 @@ passport.use(
 - require the passport.js file like so :
 
 ```js
-  require('./services/passport');
-```   
+require('./services/passport');
+```
+
 - require authRoutes.js file and call it like so :
 
 ```js
-  const app = express();
+const app = express();
 
-+ require('./routes/authRoutes')(app);
-```  
++require('./routes/authRoutes')(app);
+```
 
 ## 6 - MongoDB <a name="mongodb"></a>
 
@@ -409,13 +415,14 @@ passport.use(
 - Then create a database Username and Password (autogenerate recommanded, note the psw)
 - Then click the "Choose a connextion method" button
 - Select "Connect Your Application"
-- Copy the adress under "Connection String Only", you'll need to replace ` <PASSWORD> ` with your database password created earlier
+- Copy the adress under "Connection String Only", you'll need to replace `<PASSWORD>` with your database password created earlier
 - Click the "Close" button and go back to your Emaily App
 - Crash your server and install mongoose like so :
 
 ```
   npm install --save mongoose
 ```
+
 - Require moongose in index.js file and connect it like so :
 
 ```js
@@ -432,7 +439,7 @@ passport.use(
 
   const PORT = process.env.PORT || 5000;
   app.listen(PORT);
-``` 
+```
 
 - In config/keys.js file create the mongoURI key value pair like so :
 
@@ -443,47 +450,48 @@ passport.use(
     googleClientSecret: 'yourGoogleClientSecret',
 +   mongoURI: 'pasteTheAdressYouCopiedFromStringOnlyWithThePassword'
   };
-``` 
+```
 
-- That's it! Now you can run your server back 
+- That's it! Now you can run your server back
 
 ### 6.2 - Create a mongoDB collection with mongoose Model Classes
 
 #### 6.2.1 - models folder
 
-- Create a new folder called models in the server directory 
+- Create a new folder called models in the server directory
 - Create an User.js file inside the models folder
 
 #### 6.2.2 - Create a mongoose model class in User.js
 
-- first require mongoose and pull out mongoose's Schema property on top of the file 
+- first require mongoose and pull out mongoose's Schema property on top of the file
 
 ```js
-  const mongoose = require('mongoose');
-  const { Schema } = mongoose;
-```  
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
+```
 
 note : could be const Schema = mongoose.Schema but we use the ES2015 syntaxe
 
 - Define the collection's properties with the Schema object and tell mongoose we want to create a new collection 'users' like so :
 
 ```js
-  const userSchema = new Schema({
-    googleId: String
-  });
+const userSchema = new Schema({
+  googleId: String
+});
 
-  mongoose.model('users', userSchema);
-``` 
+mongoose.model('users', userSchema);
+```
 
 - Require the User.js file in index.js like so :
 
 ```js
-  const express = require('express');
-  const mongoose = require('mongoose');
-  const keys = require('./config/keys');
-+ require('./models/User');
-  require('./services/passport');
-``` 
+const express = require('express');
+const mongoose = require('mongoose');
+const keys = require('./config/keys');
++require('./models/User');
+require('./services/passport');
+```
+
 note : the order matters, we want to call User Model before we define it with passport
 
 - That's it! we now have a new collection called users =)
@@ -492,10 +500,10 @@ note : the order matters, we want to call User Model before we define it with pa
 
 #### 8.3.1 - Get acces to the mongoose model inside the google flow
 
-- Go in the passport.js file that contains the google flow 
+- Go in the passport.js file that contains the google flow
 - first require the mongoose library and get acces to the User Model Class like so :
 
-```js 
+```js
   const passport = require('passport');
   const GoogleStrategy = require('passport-google-oauth20').Strategy;
 + const mongoose = require('mongoose');
@@ -503,34 +511,12 @@ note : the order matters, we want to call User Model before we define it with pa
 
 + const User = mongoose.model('users');
 ```
+
 note : now the User const is the user model class
 
 - Now we use the model class ton create a new instance of user and save it to the database (delete the 3 console.log in the GoogleStrategy) :
 
 ```js
-  passport.use(
-    new GoogleStrategy(
-      {
-        clientID: keys.googleClientID,
-        clientSecret: keys.googleClientSecret,
-        callbackURL: '/auth/google/callback'
-      },
-      (accessToken, refreshToken, profile, done) => {
-+       new User({ googleId: profile.id }).save();
-      }
-    )
-  );
-``` 
-
-- Now you can run back your server, go to http://localhost:5000/auth/google and then check your mongoDB database that you created in mongoDB Atlas Cluster and you'll find your user's collection with your Google's Id
-
-### 6.4 - Mongoose Queries  and Passport Callbacks <a name="mongoose-queries"></a>
-
-#### 6.4.1 - Initiate query
-
-- We initiate a query (a search) to find if we already have the user in the collection in the GoogleStrategy callback fx
-
-```js 
 passport.use(
   new GoogleStrategy(
     {
@@ -539,13 +525,37 @@ passport.use(
       callbackURL: '/auth/google/callback'
     },
     (accessToken, refreshToken, profile, done) => {
-+     User.findOne({ googleId: profile.id })
+      +new User({ googleId: profile.id }).save();
+    }
+  )
+);
+```
+
+- Now you can run back your server, go to http://localhost:5000/auth/google and then check your mongoDB database that you created in mongoDB Atlas Cluster and you'll find your user's collection with your Google's Id
+
+### 6.4 - Mongoose Queries and Passport Callbacks <a name="mongoose-queries"></a>
+
+#### 6.4.1 - Initiate query
+
+- We initiate a query (a search) to find if we already have the user in the collection in the GoogleStrategy callback fx
+
+```js
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: keys.googleClientID,
+      clientSecret: keys.googleClientSecret,
+      callbackURL: '/auth/google/callback'
+    },
+    (accessToken, refreshToken, profile, done) => {
+      +User.findOne({ googleId: profile.id });
 
       new User({ googleId: profile.id }).save();
     }
   )
 );
-``` 
+```
+
 - We make use of a promise to conditionnaly handle new user from existing users
 
 ```js
@@ -577,7 +587,7 @@ passport.use(
 
 - We now need to say to passport when we're done with the authentification flow with done() :
 
-```js 
+```js
   passport.use(
     new GoogleStrategy(
       {
@@ -610,22 +620,22 @@ note: first argument null = everything went fine, second argument the existingUs
 #### 6.5.1 - Use serializeUser to generate a token in the passport file
 
 ```js
-  passport.serializeUser((user, done) => {
-    done(null, user.id);
-  });
-``` 
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+```
 
 note: we pass user.id as a second argument (which is not the profile.id but the id property in our user collection in mongoDB)
 
 #### 6.5.2 - Use deserializeUser to find the user in the database
 
 ```js
-  passport.deserializeUser((id, done) => {
-    User.findById(id).then(user => {
-      done(null, user);
-    });
+passport.deserializeUser((id, done) => {
+  User.findById(id).then(user => {
+    done(null, user);
   });
-``` 
+});
+```
 
 #### 6.5.3 - Make sure passport is aware that we make use of cookies to keep track of the currently signed user
 
@@ -633,31 +643,31 @@ note: we pass user.id as a second argument (which is not the profile.id but the 
 
 ```
   npm install --save cookie-session
-``` 
+```
 
 - Require cookie-session and passport library in index.js :
 
-``` js
-  const cookieSession = require('cookie-session');
-  const passport = require('passport');
-``` 
+```js
+const cookieSession = require('cookie-session');
+const passport = require('passport');
+```
 
-- Add the fonction app.use() to pass cookieSession and config it like so : 
+- Add the fonction app.use() to pass cookieSession and config it like so :
 
 ```js
-  app.use(
-    cookieSession({
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      keys: [keys.cookieKey]
-    })
-  );
-``` 
+app.use(
+  cookieSession({
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    keys: [keys.cookieKey]
+  })
+);
+```
 
 note : maxAge is the cookie expiration, 30 days (with days, hours, minuts, seconds, milliseconds), the keys property encrypt our cookie
 
 - Create the cookieKey in the Keys.js file (you can call it the way you want) :
 
-```js 
+```js
   module.exports = {
     googleClientID:
       'yourGoogleClientID',
@@ -671,13 +681,13 @@ note : maxAge is the cookie expiration, 30 days (with days, hours, minuts, secon
 - Now we tell passport that it has to use cookies for authentification in index.js :
 
 ```js
-  app.use(passport.initialize());
-  app.use(passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
 ```
 
 ### 6.6 - Test the authentification flow <a name="test-auth"></a>
 
-- Create a new route handler in the authRoute file, we want the user as response : 
+- Create a new route handler in the authRoute file, we want the user as response :
 
 ```js
   module.exports = app => {
@@ -696,18 +706,18 @@ note : maxAge is the cookie expiration, 30 days (with days, hours, minuts, secon
   };
 ```
 
-- Now you can run the identification process in your browser again (you'll probably get an error like Cannot GET auth/google/callback but that's fine) and go to http://localhost:5000/api/current_user, you should see your datas 
+- Now you can run the identification process in your browser again (you'll probably get an error like Cannot GET auth/google/callback but that's fine) and go to http://localhost:5000/api/current_user, you should see your datas
 
 ### 6.7 - Handle Logout User <a name="logout"></a>
 
 - Create a new route handler to request logout() like so :
 
 ```js
-  app.get('/api/logout', (req, res) => {
-      req.logout();
-      res.send(req.user);
-    });
-``` 
+app.get('/api/logout', (req, res) => {
+  req.logout();
+  res.send(req.user);
+});
+```
 
 - You can now go to http://localhost:5000/api/logout to log out !
 
@@ -741,43 +751,43 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
 
 ```
   heroku open
-``` 
+```
 
 - Copy the address and paste it into the Authorized JavaScript field without the "/" in the end (make sure you allow this address in the Configure consent screen)
 - then passed the same addresse into the Authorized redirect URIs with the route "/auth/google" the click the "Create" button
 
-### 7.2 - Separate in 2 sets of keys 
+### 7.2 - Separate in 2 sets of keys
 
 - Create 2 new files dev.js and prod.js inside the Config file
-- Dev mode : Cut & Paste the keys from the keys.js file inside of the new dev.js file (add the dev.js file to .gitignore and remove the keys.js file from it) 
+- Dev mode : Cut & Paste the keys from the keys.js file inside of the new dev.js file (add the dev.js file to .gitignore and remove the keys.js file from it)
 - In the file keys.js we're going to define the logic to know which set of keys we use (prod or dev) like so :
 
 ```js
-  if (process.env.NODE_ENV === 'production') {
-    //we are in production - return the prod set of keys
-    module.exports = require('./prod');
-  }else {
-    // we are in development - return the dev keys
-    module.exports = require('./dev');
-  }
+if (process.env.NODE_ENV === 'production') {
+  //we are in production - return the prod set of keys
+  module.exports = require('./prod');
+} else {
+  // we are in development - return the dev keys
+  module.exports = require('./dev');
+}
 ```
 
 - Prod mode: Copy & paste the code of the dev.js file into the prod.js file and replace the keys by Env variables like so :
 
 ```js
-  module.exports = {
-    googleClientID:  process.env.GOOGLE_CLIENT_ID,
-    googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    mongoURI: process.env.MONGO_URI,
-    cookieKey: process.env.COOKIE_KEY
-  };
+module.exports = {
+  googleClientID: process.env.GOOGLE_CLIENT_ID,
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  mongoURI: process.env.MONGO_URI,
+  cookieKey: process.env.COOKIE_KEY
+};
 ```
 
 ### 7.3 - Setup Env variable in Heroku
 
 - Go to your Heroku dashboard and select your app
 - Then click on the "settings" button
-- Next to "Config var" click the "Reveal Config vars" 
+- Next to "Config var" click the "Reveal Config vars"
 - Now you setup all the Env variables for our App in the KEY and VALUE fields (add the key + value one by one, ex: GOOGLE_CLIENT_ID as key and yourGoogleClientKey as value, then click the "Add" button)
 - You can now go back to your terminal and add/commit/push your project on the heroku git repo and go back to your browser to check if your heroku url app works
 - You should have a redirect_uri_mismatch error when going to https://yourherokuurl.herokuapp.com/auth/google due to the "http" (and not https) redirection
@@ -786,7 +796,7 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
 
 - We need to add another property to handle the callbackURL in the GoogleStrategy to handle on Heroku (by saying to GoogleStrategy that if our request runs through any proxy, trust the proxy and calculate the callback url) like so :
 
-```js 
+```js
   passport.use(
     new GoogleStrategy(
       {
@@ -810,7 +820,7 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
       }
     )
   );
-``` 
+```
 
 - You can now push the changes on Heroku GIT repo and go back to your browser to test it out, everything should be fine now!
 
@@ -842,11 +852,11 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
 
 ```
   npm install --save concurrently
-``` 
+```
 
 - Now you can start back your App by running the command " npm run dev ", this will run both server and client =) !
 
-### 8.3 - Routing Stumbling block 
+### 8.3 - Routing Stumbling block
 
 - We need to find a way that our routes work both on the localhost and heroku server
 
@@ -856,24 +866,23 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
 
 ```
   npm install http-proxy-middleware --save
-```  
+```
 
 - Now create a setupProxy.js file inside the src directory and add the code below :
 
 ```js
-  const proxy = require('http-proxy-middleware')
-  
-  module.exports = function(app) {
-      app.use(proxy(['/api', '/auth/google'], { target: 'http://localhost:5000' }));
-  }
-``` 
+const proxy = require('http-proxy-middleware');
+
+module.exports = function(app) {
+  app.use(proxy(['/api', '/auth/google'], { target: 'http://localhost:5000' }));
+};
+```
 
 - That should be ok to fix the proxy errors
 
 - Also think to add another Authorized redirect URIs in your emaily-dev google console project for the client side like so :
 
   http://localhost:3000/auth/google/callback
-
 
 ## 9 - Dev the Client Side <a name="dev-client"></a>
 
@@ -906,28 +915,27 @@ https://help.heroku.com/JS13Y78I/i-need-to-whitelist-heroku-dynos-what-are-ip-ad
     )
   );
 
-``` 
+```
 
 note: We also refacto a little bit the if statement by adding a return key word that will automatically stop the instruction if it's called so we don't need the else statement anymore =)
-
 
 ### 9.2 - React Setup <a name="setup-react"></a>
 
 - Let's now install some dependencies such as redux and react-router like so :
 
-``` 
+```
   npm install --save redux react-redux react-router-dom
-``` 
+```
 
 - Now we setup our src folder pattern by deleting all the files inside of it exept the setupProxy.js and the serviceWorker.js and create a new index.js file with the code below :
 
-```js 
+```js
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App';
 
 ReactDOM.render(<App />, document.querySelector('#root'));
-```  
+```
 
 note: here we import React, ReactDOM and the App component that we're going to create, then we render the App component inside the div with the id "root" in the index.html file which is in the public directory.
 
@@ -941,7 +949,7 @@ const App = () => {
 };
 
 export default App;
-```  
+```
 
 note: we can create functionnal or class based components, in both cases we will import react and export the component, also the code below the return statement is what the component will show on the screen.
 
@@ -970,15 +978,15 @@ Let's code this !
 
 - First we import de Provider tag and the createStore, applyMiddleware helpers like so :
 
-```js 
-  import { Provider } from 'react-redux';
-  import { createStore, applyMiddleware } from 'redux';
-``` 
+```js
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+```
 
 - Now it's time to create the store like so :
 
 ```js
-  const store = createStore(() => [], {}, applyMiddleware());
+const store = createStore(() => [], {}, applyMiddleware());
 ```
 
 note : The first argument is our reducers (for now we create a useless reducer to not leave it empty), the second argument is the initial state of our Application (not really usefull for our app so for now we pass an empty object), finally the third argument is the applyMiddleware call.
@@ -986,17 +994,17 @@ note : The first argument is our reducers (for now we create a useless reducer t
 - Now we need to wrap the App component with the Provider tag like so :
 
 ```js
-  ReactDOM.render(
-    <Provider store={store}>
-      <App />
-    </Provider>,
-    document.querySelector('#root')
-  );
-```  
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.querySelector('#root')
+);
+```
 
 note : We pass the store as a prop inside the Provider tag
 
-- Now let's create our Auth Reducer, first for the sake of our src folder pattern, we're going to create a reducers folder inside of it. In the reducers folder we now create an authReducer.js file and index.js file 
+- Now let's create our Auth Reducer, first for the sake of our src folder pattern, we're going to create a reducers folder inside of it. In the reducers folder we now create an authReducer.js file and index.js file
 
 - Inside the authReducer.js file we're going to create our reducer and export it like so :
 
@@ -1007,7 +1015,7 @@ export default function(state = {}, action) {
       return state;
   }
 }
-``` 
+```
 
 note: The first argument is the State object that is responsable for this reducer and the second argument is the Action object, then we define the switch statement where we will define the differents cases (as default case, we return the state with no changes)
 
@@ -1020,7 +1028,7 @@ import authReducer from './authReducer';
 export default combineReducers({
   auth: authReducer
 });
-``` 
+```
 
 note: We import the combineReducers where we will call all our different reducers that we will pass a value of a key that we define like auth (key) : authReducer (value)
 
@@ -1039,34 +1047,38 @@ note: We import the combineReducers where we will call all our different reducer
 - All the configuration is gonna be in the App.js file so we first need to import react-router-dom inside of it :
 
 ```js
-  import { BrowserRouter, Route } from 'react-router-dom';
-``` 
+import { BrowserRouter, Route } from 'react-router-dom';
+```
 
 note: The BrowserRouter object is what tells react how to behave by looking at the current URL and change the set of components visible on the screen. The Route object is a React Component that is used to setup a rule between a route that the user can visite and a set of component that will be visible on the screen.
 
 - Now e're going to create 4 dummy components (Header, Dashboard, SurveyNew, Landing) that will be replace later with our real components to setup React-router in the App.js file :
 
 ```js
-  const Header = () => <h2>Header</h2>
-  const Dashboard = () => <h2>Dashboard</h2>
-  const SurveyNew = () => <h2>SurveyNew</h2>
-  const Landing = () => <h2>Landing</h2>
-```  
+const Header = () => <h2>Header</h2>;
+const Dashboard = () => <h2>Dashboard</h2>;
+const SurveyNew = () => <h2>SurveyNew</h2>;
+const Landing = () => <h2>Landing</h2>;
+```
 
 - Let's now use BrowserRouter and Router inside of the App.js return statement (clean the "App" text before) and define our first route for the landing component :
 
 ```js
-  const App = () => {
-    return (
-      <div>
-+       <BrowserRouter>
-+       <div>
-+         <Route  path="/" component={Landing} />
-+       </div>
-+       </BrowserRouter>
-+     </div>
-    );
-  };
+const App = () => {
+  return (
+    <div>
+      +{' '}
+      <BrowserRouter>
+        +{' '}
+        <div>
+          + <Route path='/' component={Landing} />+{' '}
+        </div>
+        +{' '}
+      </BrowserRouter>
+      +{' '}
+    </div>
+  );
+};
 ```
 
 note : We define all the possibles routes with the Route object. The BrowserObject accept only 1 child component at most so make sure you wrapp your components inside of a single div tag
@@ -1074,14 +1086,14 @@ note : We define all the possibles routes with the Route object. The BrowserObje
 - Now time to setup the others routes :
 
 ```js
-  <BrowserRouter>
-    <div>
-+     <Header />
-+-    <Route exact path="/" component={Landing} />
-+     <Route exact path="/surveys" component={Dashboard} />
-+     <Route path="/surveys/new" component={SurveyNew} />
-    </div>
-  </BrowserRouter>
+<BrowserRouter>
+  <div>
+    + <Header />
+    +- <Route exact path='/' component={Landing} />
+    + <Route exact path='/surveys' component={Dashboard} />
+    + <Route path='/surveys/new' component={SurveyNew} />
+  </div>
+</BrowserRouter>
 ```
 
 note: We pass the keyword "exact" (could have write exact={true} but here we use the JSX syntaxe that assumes exact is true) to the "Landing" route to say that it only renders on the "/" route, otherwise it would render on every routes since they all start with a "/" (same operation for the Dashboard component that we only want to render in the /"surveys" route and not on the "/surveys/new" route). Also we want the Header on every routes so we cant juste call the component by itself on top of the routes !
@@ -1096,12 +1108,12 @@ note: We pass the keyword "exact" (could have write exact={true} but here we use
 
 ```
   npm install --save materialize-css
-``` 
+```
 
 - To use it we simply have to do an import statement in the index.js file with the good path like so (check the path in the .node_module file) :
 
 ```js
-  import 'materialize-css/dist/css/materialize.min.css';
+import 'materialize-css/dist/css/materialize.min.css';
 ```
 
 note: we don't specify a relative path because webpack is gonna automatically assume that it's a npm package of our node_modules directory that way
@@ -1111,36 +1123,36 @@ note: we don't specify a relative path because webpack is gonna automatically as
 - Let's now make our Header Component as a class based component in the components directory and import it in the App.js file to replace the dummy Header component that we did before and design it with some Materialize CSS classes like so :
 
 ```js
-  class Header extends React.Component {
-    render() {
-      return (
-        <nav>
-          <div className='nav-wrapper'>
-            <a className='left brand-logo'>Emaily</a>
-            <ul className='right'>
-              <li>
-                <a>Sign Up With Google</a>
-              </li>
-            </ul>
-          </div>
-        </nav>
-      );
-    }
+class Header extends React.Component {
+  render() {
+    return (
+      <nav>
+        <div className='nav-wrapper'>
+          <a className='left brand-logo'>Emaily</a>
+          <ul className='right'>
+            <li>
+              <a>Sign Up With Google</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    );
   }
-``` 
+}
+```
 
 ### 9.6 - Current User API <a name="user-api"></a>
 
-- We now need to figure out whether or not the user is logged in  to render the appropriate buttons in the Header
+- We now need to figure out whether or not the user is logged in to render the appropriate buttons in the Header
 - On the server side, in the routes file, we're gonna use the "/api/current_user" route to decide if wheter or not the user is connected by doing an Ajax request
 
 - The React App boots up -> App component calls an **action creator** (redux) -> this action Creator will make an **API request** (with the **axios** library to do the Ajax request to the "/api/current_user" route) to the back-end to ask whether or not the current user is logged in -> then we're going to get a response back presumably containing the user if he's logged in -> with that response we're gonna use another library **redux-thunk** to dispatch an action off to all the different **reducers** of our app -> the action which contains whether or not the user is logged in is then send to the **authReducer** -> the authReducer will be then responsable for looking at that action and update the state to say whether or not the user is logged in -> then with the updated state we're gonna update the content inside our Header by setting up the Header to communicate with our **Redux Store**.
 
 - First we install the axios and redux-thunk library :
 
-``` 
+```
   npm install --save axios redux-thunk
-``` 
+```
 
 - Now import the redux-thunk and hook it up to the createStore as a middleware :
 
@@ -1148,26 +1160,26 @@ note: we don't specify a relative path because webpack is gonna automatically as
 +  import reduxThunk from 'redux-thunk';
 
 +- const store = createStore(reducers, {}, applyMiddleware(reduxThunk));
-``` 
+```
 
 - Now let's make the Action Creator, first create a new folder named "actions" inside the src directory (where we will code all of our actions creators)
 - Now create an index.js file inside of the actions folder where we're gonna code our first action creator even if we will refacto it later :
 
-```js 
-  import axios from 'axios';
-  import { FETCH_USER } from './types';
+```js
+import axios from 'axios';
+import { FETCH_USER } from './types';
 
-  export const fetchUser = () => {
-    axios.get('/api/current_user');
-  };
-``` 
+export const fetchUser = () => {
+  axios.get('/api/current_user');
+};
+```
 
 note: we first import the axios library to handle the Ajax request and the FETCH_USER action type (we will create the action types right after in a seperate file). Then we define our action creator (fetchUser) and inside we do our Ajax request using axios to get the "/api/current_user" route
 
 - We define our action types in another file in the actions folder, name it types.js :
 
 ```js
-  export const FETCH_USER = 'fetch_user';
+export const FETCH_USER = 'fetch_user';
 ```
 
 - Redux-Thunk : Gives us direct access to the dispatch function to manually dispatch an anction at point in time from an action creator
@@ -1181,7 +1193,7 @@ note: we first import the axios library to handle the Ajax request and the FETCH
 +       .then(res => dispatch({ type: FETCH_USER, payload: res }));
 +   };
   };
-``` 
+```
 
 note: Here we now return a function, thanks to the Redux Thunk middleware, it's gonna inspect whatever value is inside the action creator and if it sees that we return a function instead of a normal action it's gonna automatically call the function pass the dispatch function as an argument to it. In the end we say that we want to dispatch a function after the request has been succesfully completed (when we have the response from the API).
 
@@ -1191,7 +1203,7 @@ note: Here we now return a function, thanks to the Redux Thunk middleware, it's 
 ```js
 +-class App extends React.Component {
 +   componentDidMount() {
-+      
++
 +   }
 +   render() {
       return (
@@ -1208,7 +1220,7 @@ note: Here we now return a function, thanks to the Redux Thunk middleware, it's 
       );
 +   }
   }
-``` 
+```
 
 note: we use the componentDidMount() lifecycle method to fetch the current user
 
@@ -1216,18 +1228,19 @@ note: we use the componentDidMount() lifecycle method to fetch the current user
 - We first import the connect helper from the react-redux library then we import our actions creators like so :
 
 ```js
-  import { connect } from 'react-redux';
-  import * as actions from '../actions';
-``` 
+import { connect } from 'react-redux';
+import * as actions from '../actions';
+```
 
 - Let's now add the connect function to the export default of our App component :
 
 ```js
-  export default connect(
-    null,
-    actions
-  )(App);
+export default connect(
+  null,
+  actions
+)(App);
 ```
+
 note : The first argument is the mapStateToProps function (but we don't use it so we pass null), in the second argument we pass all the actions creators that we want to wire up
 
 - Now the actions creators are props of the App component so let's call them in the componentDidMount() lifecycle method :
@@ -1236,18 +1249,19 @@ note : The first argument is the mapStateToProps function (but we don't use it s
   componentDidMount() {
 +     this.props.fetchUser();
     }
-``` 
+```
+
 - Now we need to make sure it works by adding a console log in the authReducer like so:
 
 ```js
-  export default function(state = {}, action) {
-+   console.log(action);
-    switch (action.type) {
-      default:
-        return state;
-    }
+export default function(state = {}, action) {
+  +console.log(action);
+  switch (action.type) {
+    default:
+      return state;
   }
-``` 
+}
+```
 
 note : Refresh the browser, you should see 4 console logs. The first 3 are part of the redux boot up process, so we only care about the 4th one which tell us wheter or not the user is logged in. The payload Object is the axios response object with all the different properties. The data property communicates back the actual json that the server sent to us. We now know that redux-thunk works correcty (we made the request to our back end server and after it was completed we dispatched an action which was sent to all of our reducers).
 
@@ -1258,15 +1272,15 @@ note : Refresh the browser, you should see 4 console logs. The first 3 are part 
 +-  const res = await axios.get('/api/current_user');
 +-  dispatch({ type: FETCH_USER, payload: res.data });
 +-};
-``` 
+```
 
 - Now we need to make sure that our action gets picked up inside of our authReducer, just before we're gonna do a little change to our response because we only want the data property :
 
 ```js
-  export const fetchUser = () => async dispatch => {
-    const res = await axios.get('/api/current_user');
-+   dispatch({ type: FETCH_USER, payload: res.data });
-  };
+export const fetchUser = () => async dispatch => {
+  const res = await axios.get('/api/current_user');
+  +dispatch({ type: FETCH_USER, payload: res.data });
+};
 ```
 
 - Now we need to import the fetchUser action type to our authReducer and set another switch case statement :
@@ -1283,7 +1297,7 @@ note : Refresh the browser, you should see 4 console logs. The first 3 are part 
 ```
 
 note: "null" => we don't know yet if the user is logged in or not / "User model" (actually the data property which is the payload object, yes the user is logged in) => object with the user's id
- / "false" => no, the user isn't logged in
+/ "false" => no, the user isn't logged in
 
 - Time to make sure that the Header component is aware of whether or not the user is logged in using the auth state
 - First we connect the Header to the reducers like we did before then we define our mapStateToProps function which contains the entire state object out of the redux store :
@@ -1296,7 +1310,7 @@ note: "null" => we don't know yet if the user is logged in or not / "User model"
 + }
 
 +-export default connect(mapStateToProps)(Header);
-``` 
+```
 
 note: we use the ES6 syntaxe but the mapStateToProps could be like that :
 
@@ -1304,7 +1318,8 @@ note: we use the ES6 syntaxe but the mapStateToProps could be like that :
 function mapStateToProps(state) {
   return { auth: state.auth };
 }
-``` 
+```
+
 - Now we need to use the auth property to decide what content to show on the Header
 - Let's create a helper method that we call renderContent with a switch statement to render the appropriate content if we're logged in or not (don't forget to replace the actual li tag that has the "Sign Up With Google" with the `{this.renderContent()}`method) :
 
@@ -1329,7 +1344,7 @@ function mapStateToProps(state) {
     }
 ```
 
-- Now we have to handle the redirection after we logged in 
+- Now we have to handle the redirection after we logged in
 - First let's go back to our server's authRoutes.js file and add some redirection to the auth/google/callback route :
 
 ```js
@@ -1348,10 +1363,10 @@ note: We add an arrow fx which is where the request is sent to after the passpor
 - First add the href to the logout "a" tag inside the header to go on the route "/api/logout" and then we just have to redirect the user to the "/" landing page in the authRoute.js file like so (don't forget to delete the res.send reponse that is useless since it's empty) :
 
 ```js
-  app.get('/api/logout', (req, res) => {
-      req.logout();
-+-    res.redirect('/');
-    });
+app.get('/api/logout', (req, res) => {
+  req.logout();
+  +-res.redirect('/');
+});
 ```
 
 - Now we can create our Landing component instead of the dummy one that we created in the App.js file
@@ -1364,12 +1379,9 @@ note: We add an arrow fx which is where the request is sent to after the passpor
 ```js
 import { Link } from 'react-router-dom';
 
-<Link
-  to={this.props.auth ? '/surveys' : '/'}
-  className='left brand-logo'
->
-    Emaily
-</Link>
+<Link to={this.props.auth ? '/surveys' : '/'} className='left brand-logo'>
+  Emaily
+</Link>;
 ```
 
 ## 10 - Handling Payments with Stripe <a name="payments"></a>
@@ -1384,7 +1396,7 @@ import { Link } from 'react-router-dom';
 
 ```
   npm install --save react-stripe-checkout
-``` 
+```
 
 - Let's now put the publishable key and secret key on our client and server side.
 
@@ -1404,6 +1416,7 @@ import { Link } from 'react-router-dom';
 +   stripeSecretKey: 'yourkey'
   };
 ```
+
 - Now let's add they key for the prod.js file like so:
 
 ```js
@@ -1415,7 +1428,7 @@ module.exports = {
 +   stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
 +   stripeSecretKey: process.env.STRIPE_SECRET_KEY
   };
-``` 
+```
 
 - Now let's set up in the heroku environement, go to your heroku dashbord and add the 2 new variables for the 2 keys
 
@@ -1427,7 +1440,8 @@ module.exports = {
 
 ```
 REACT_APP_STRIPE_KEY=yourpublishablekey
-``` 
+```
+
 note: don't wrapp the key with quotes here
 
 ### 10.2 - Payment Component
@@ -1436,53 +1450,59 @@ note: don't wrapp the key with quotes here
 - First create a new component called Payments.js and make it a class based component like so :
 
 ```js
-  import React from 'react';
-  import StripeCheckout from 'react-stripe-checkout';
+import React from 'react';
+import StripeCheckout from 'react-stripe-checkout';
 
-  class Payments extends React.Component {
-    render() {
-      return <StripeCheckout />;
-    }
+class Payments extends React.Component {
+  render() {
+    return <StripeCheckout />;
   }
-  export default Payments;
-``` 
+}
+export default Payments;
+```
+
 note: we import Stripe Checkout and return it but we need to add some config now
 
 - Now we need to add a few required properties to our StripeCheckout compo :
 
 ```js
-  <StripeCheckout
-    amount={500}
-    token={token => console.log(token)}
-    stripeKey={process.env.REACT_APP_STRIPE_KEY}
-  />
-``` 
+<StripeCheckout
+  amount={500}
+  token={token => console.log(token)}
+  stripeKey={process.env.REACT_APP_STRIPE_KEY}
+/>
+```
+
 note: the prop amount is the amount of money that we want to request from the user (the amount is in dollar and cents, so 500 cents = 5 dollars, we could chose another currency). The token prop is the call back token provided by stripe that represent the transaction
 
 - Now just import the Payments compo in the Header one and show it in the header in the case that the user is logged in :
 
- ```js
+```js
 +- return [
 +           <li>
 +             <Payments />
 +           </li>,
-            <li>
-              <a href='/api/logout'>Logout</a>
-            </li>
-          ];
- ```
+           <li>
+             <a href='/api/logout'>Logout</a>
+           </li>
+         ];
+```
 
 - Now we can fix the console log warning by adding a key prop to our li tags like so :
 
 ```js
-  [
-+-  <li key="1">
+[
+  +-(
+    <li key='1'>
       <Payments />
-    </li>,
-+-  <li key="2">
+    </li>
+  ),
+  +-(
+    <li key='2'>
       <a href='/api/logout'>Logout</a>
     </li>
-  ];
+  )
+];
 ```
 
 - And custom our payment window like so :
@@ -1504,12 +1524,13 @@ note: the prop amount is the amount of money that we want to request from the us
 - First let's create a new action creator handleToken, let's st rt with the actions/index.js file :
 
 ```js
-  export const handleToken = token => async dispatch => {
-    const res = await axios.post('/api/stripe', token);
+export const handleToken = token => async dispatch => {
+  const res = await axios.post('/api/stripe', token);
 
-    dispatch({ type: FETCH_USER, payload: res.data });
-  };
+  dispatch({ type: FETCH_USER, payload: res.data });
+};
 ```
+
 note: Here we want to do a post request to the backend server because we want to send the information to it (we havent define the route handler yet but it's gonna be /api/stripe)
 
 - Now let's make sure it get called whenever we got a token from the stripe checkout form. In the Payments.js component, import connect and all the actions, then wire up the connect helper and finaly update the token arrow fx to call our action creator :
@@ -1542,47 +1563,46 @@ note: Here we want to do a post request to the backend server because we want to
 - Now we need to create the route handler in the routes directory to receive the token (we will do that in a new file billingRoutes.js) :
 
 ```js
-  module.exports = app => {
-    app.post('/api/stripe', (req, res) => {
-      
-    });
-  };
+module.exports = app => {
+  app.post('/api/stripe', (req, res) => {});
+};
 ```
 
 - Don't forget to require the file in the index.js file of your server :
 
 ```js
-  require('./routes/authRoutes')(app);
-+ require('./routes/billingRoutes')(app);
-``` 
+require('./routes/authRoutes')(app);
++require('./routes/billingRoutes')(app);
+```
 
 - Now we're going to install an npm module that we use for our server side to help work with the Stripe API :
 
 ```
   npm install --save stripe
-``` 
+```
 
 - Let's now import stripe in the billingRoutes.js file and the Stripe Secret key :
 
 ```js
-  const keys = require('../config/keys');
-  const stripe = require('stripe')(keys.stripeSecretKey);
-``` 
+const keys = require('../config/keys');
+const stripe = require('stripe')(keys.stripeSecretKey);
+```
+
 note: we pass the key as a second set of parentheses like the stripe's document ask so
 
 - Now we have an issue because express doesn't parse the request payload that contains the stripe token, to solve that issue we can install another npm modul in the server directory that will tell express to parse the request body and make it available to everything inside of our app (the modul is body-parser) :
 
 ```
-  npm install --save bnody-parser
-```  
+  npm install --save body-parser
+```
 
 - Now let's require that modul in the index.js file and use it :
 
 ```js
-  const bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 
-  app.use(bodyParser.json());
-``` 
+app.use(bodyParser.json());
+```
 
 note: app.use(bodyParser.json()) above all first app.use that we coded before
 
@@ -1599,7 +1619,8 @@ note: app.use(bodyParser.json()) above all first app.use that we coded before
 +     })
     });
   };
-``` 
+```
+
 - Now we can console log the returned promise and refacto with the async/await syntaxe :
 
 ```js
@@ -1614,8 +1635,9 @@ note: app.use(bodyParser.json()) above all first app.use that we coded before
 +     console.log(charge);
     });
   };
-``` 
-- Now we need to give credits to the user when the payment was successfuly done 
+```
+
+- Now we need to give credits to the user when the payment was successfuly done
 - First we need to add another property to our User model :
 
 ```js
@@ -1624,7 +1646,7 @@ note: app.use(bodyParser.json()) above all first app.use that we coded before
     name: String,
 =   credits: { type: Number, default: 0 }
   });
-``` 
+```
 
 note: here we pass a default value of 0 and specify it's a number
 
@@ -1645,23 +1667,23 @@ note: here we pass a default value of 0 and specify it's a number
 +     res.send(user);
     });
   };
-``` 
-### 10.4 - Requiring Authentification with a middleware 
+```
 
-- Next we need to make sure that the user is logged in before we add credits or bill any credit card. We can make sure of that by using a new middleware that will verify if the user is logged in 
+### 10.4 - Requiring Authentification with a middleware
+
+- Next we need to make sure that the user is logged in before we add credits or bill any credit card. We can make sure of that by using a new middleware that will verify if the user is logged in
 - We are going to centralize our middlewares in a new directory that we call middlewares
 - Inside of it, create a new file named "requireLogin.js" and create our middleware :
 
 ```js
-  module.exports = (req, res, next) => {
-    if (!req.user) {
-      return res.status(401).send({ error: 'You must log in !' });
-    }
+module.exports = (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).send({ error: 'You must log in !' });
+  }
 
-    next();
-  };
-``` 
-
+  next();
+};
+```
 
 note: the argument "next" is a callback fx that we call when our middleware is complete. Here we say that if the user isn't logged in then send back the response with the of status 401 which means forbidden, and if he's logged in then go to the "next()" middleware.
 
@@ -1684,24 +1706,68 @@ note: the argument "next" is a callback fx that we call when our middleware is c
       res.send(user);
     });
   };
-``` 
+```
 
 ### 10.5 - Display Credit Quandtity
 
 - Now let's display our credits to the client side inside our Header component :
 
 ```js
-  return [
-            <li key="1">
-              <Payments />
-            </li>,
-+           <li key="2" style={{ margin:'0 10px'}}>
-+             Credits : {this.props.auth.credits}
-+           </li>,
-            <li key="3">
-              <a href='/api/logout'>Logout</a>
-            </li>
-          ];
+return [
+  <li key='1'>
+    <Payments />
+  </li>,
+  +(
+    <li key='2' style={{ margin: '0 10px' }}>
+      + Credits : {this.props.auth.credits}+{' '}
+    </li>
+  ),
+  <li key='3'>
+    <a href='/api/logout'>Logout</a>
+  </li>
+];
 ```
 
+## 11 - Back End to Front End Routing in Prod <a name="routing-prod"></a>
 
+- We have some routes that are being handled by our react-router and others by our express server
+- We have to tell our express server that if it ever sees a request for some route that it doesn't know about, it has to assume that whoever is making this request is probably trying to access to a react-router route
+
+- Inside our index.js file's server we're gonna add some configuration below the route logic to make sure express works correctly in the production mode :
+
+```js
+if (process.env.NODE_ENV === 'production') {
+  // Express will serve up production assets
+  // like our main.js file / main.css file
+  app.use(express.static('client/build'));
+
+  // Express will serve up the index.html file
+  // if it doesn't recognize the route
+  const path = require('path');
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
+```
+
+note: first line says that if any get request comes in for some routes or file or anything to our application that we don't understand what it's looking for, then look in the 'client/build' directory (produced when we build the react app) and check if there's some file inside that match up with the request. The second line says that if someone makes a request for a route that we don't understand, just serve it up the HTML document
+
+- Now we need to make sure that any time we deploy our app to Heroku, we actually build our code base and then deploy it
+
+## 11.1 - Heroku build step
+
+- Now we need to add a new script in the scripts section inside our package.json file in the server directory that will be automatically called after our server has completed installing it's own dependencies :
+
+```js
+  "scripts": {
+    "start": "node index.js",
+    "server": "nodemon index.js",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client \"",
++   "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+  },
+```
+
+note: first we tell heroku to install all our npm modules in delopment & production dependencies. Then we say to install all the dependencies in the client side of our projects and when it's done we say to build the client side.
+
+- Now we need to commit and push our changes to Heroku
