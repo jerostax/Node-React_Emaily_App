@@ -1839,3 +1839,21 @@ note: Instead of registering the Schema to mongoose we export it that we can the
 ```  
 
 note: in the end the recipients record is gonna be an array of recipient schema records
+
+- Now we need to set up a relationship between a survey and a user and keep track of the dates that we sent the survey and when we got the last response :
+
+```js
+  const surveySchema = new Schema({
+    title: String,
+    body: String,
+    subject: String,
+    recipients: [RecipientSchema],
+    yes: { type: Number, default: 0 },
+    no: { type: Number, default: 0 },
++   _user: { type: Schema.Types.ObjectId, ref: 'User' },
++   dateSent: Date,
++   lastResponded: Date
+  });
+``` 
+
+note: here, whenever a Recipient Schema is saved on our databse it will be assigned to a specific user's id
