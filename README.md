@@ -35,6 +35,8 @@
 11. [Back End to Front End Routing in Prod](#routing-prod)
 12. [Mongoose for Survey Creation](#mongoose-survey)
     1. [Survey Model](#survey-model)
+    2. [Survey Route Handler and User Credits middleware](#survey-route)
+    3. [Creating Surveys](#create-survey)
 
 ## 1 - Server Setup <a name="server-setup"></a>
 
@@ -1772,7 +1774,7 @@ note: first line says that if any get request comes in for some routes or file o
 
 note: first we tell heroku to install all our npm modules in delopment & production dependencies. Then we say to install all the dependencies in the client side of our projects and when it's done we say to build the client side.
 
-- Now we need to commit and push our changes to Heroku 
+- Now we need to commit and push our changes to Heroku
 
 - When it's done, test to add credits on Heroku, if it's not working, you probably need to push the .env.production file to heroku if you put it in the .gitignore file at first to get your stripe key.
 
@@ -1786,39 +1788,42 @@ note: first we tell heroku to install all our npm modules in delopment & product
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const surveySchema = new Schema ({
+const surveySchema = new Schema({
   title: String,
   body: String,
   subject: String,
   recipients: [String],
-  yes: { type: Number, default: 0},
-  no: { type: Number, default: 0}
-})
+  yes: { type: Number, default: 0 },
+  no: { type: Number, default: 0 }
+});
 
 mongoose.model('surveys', surveySchema);
-``` 
+```
+
 note: the recipients is comma-separated list of email addresses (array of strings) with a sub document collection to know if wether or not the client already clicked (boolean) the yes or no answer to the survey
 
 - Now we need to require the file in the index.js file like so :
 
 ```js
-  require('./models/User');
-+ require('./models/Survey');
-  require('./services/passport');
-``` 
+require('./models/User');
++require('./models/Survey');
+require('./services/passport');
+```
+
 - Now we need to create the sub document for the recipient document, create a Recipient.js file in the models directory and add the code below:
 
 ```js
-  const mongoose = require('mongoose');
-  const { Schema } = mongoose;
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-  const recipientSchema = new Schema({
-    email: String,
-    responded: { type: Boolean, default: false }
-  });
+const recipientSchema = new Schema({
+  email: String,
+  responded: { type: Boolean, default: false }
+});
 
-  module.exports = recipientSchema;
+module.exports = recipientSchema;
 ```
+
 note: Instead of registering the Schema to mongoose we export it that we can then import it to the Survey model like so :
 
 ```js
@@ -1836,7 +1841,7 @@ note: Instead of registering the Schema to mongoose we export it that we can the
   });
 
   mongoose.model('surveys', surveySchema);
-```  
+```
 
 note: in the end the recipients record is gonna be an array of recipient schema records
 
@@ -1854,6 +1859,43 @@ note: in the end the recipients record is gonna be an array of recipient schema 
 +   dateSent: Date,
 +   lastResponded: Date
   });
-``` 
+```
 
 note: here, whenever a Recipient Schema is saved on our databse it will be assigned to a specific user's id
+
+### 12.2 - Survey route handler <a name="survey-route"></a>
+
+- First create a new route handler in the routes directory called surveyRoutes.js and add the code below:
+
+```js
+const requireLogin = require('../middlewares/requireLogin');
+const requireCredits = require('../middlewares/requireCredits');
+
+module.exports = app => {
+  app.post('/api/surveys', requireLogin, requireCredits, (req, res) => {});
+};
+
+```
+
+note: 1st we want to make sure the user is logged in (by importing the middleware requireLogin and passing it as the 2nd argument), 2nd we want to make sure the user has enough credits (at least 1 credit) to build a survey by creating another middleware (as a third argument in the route handler) called requireCredits.js like so :
+
+```js
+module.exports = (req, res, next) => {
+  if (req.user.credits < 1) {
+    return res.status(403).send({ error: 'Not enough credits!' });
+  }
+  next();
+};
+```
+
+note: We send a 403 error to say it's a forbidden request (like "you're not authorized") => check the [w3.org doc](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html)
+
+- Don't forget to add this new route handler to the index.js file :
+
+```js
+require('./routes/authRoutes')(app);
+require('./routes/billingRoutes')(app);
++require('./routes/surveyRoutes')(app);
+```
+
+### 12.3 - Creating Surveys <a name="create-survey"></a>
