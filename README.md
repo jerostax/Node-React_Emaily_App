@@ -33,6 +33,8 @@
    6. [Current User API](#user-api)
 10. [Handling Payments with Stripe](#payments)
 11. [Back End to Front End Routing in Prod](#routing-prod)
+12. [Mongoose for Survey Creation](#mongoose-survey)
+    1. [Survey Model](#survey-model)
 
 ## 1 - Server Setup <a name="server-setup"></a>
 
@@ -1770,4 +1772,35 @@ note: first line says that if any get request comes in for some routes or file o
 
 note: first we tell heroku to install all our npm modules in delopment & production dependencies. Then we say to install all the dependencies in the client side of our projects and when it's done we say to build the client side.
 
-- Now we need to commit and push our changes to Heroku
+- Now we need to commit and push our changes to Heroku 
+
+- When it's done, test to add credits on Heroku, if it's not working, you probably need to push the .env.production file to heroku if you put it in the .gitignore file at first to get your stripe key.
+
+## 12 - Mongoose for Survey Creation <a href="mongoose-survey"></a>
+
+### 12.1 - Survey Model <a href="survey-model"></a>
+
+- First we're going to create a mongoose Model class. First create a new file in the models directory called Survey.js and add the code below:
+
+```js
+  const mongoose = require('mongoose');
+  const { Schema } = mongoose;
+
+  const surveySchema = new Schema ({
+    title: String,
+    body: String,
+    subject: String,
+    recipients: [String]
+  })
+
+  mongoose.model('surveys', surveySchema);
+``` 
+note: the recipients is comma-separated list of email addresses so it's gonna be an array of strings 
+
+- Now we need to require the file in the index.js file like so :
+
+```js
+  require('./models/User');
++ require('./models/Survey');
+  require('./services/passport');
+``` 
