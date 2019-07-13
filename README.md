@@ -1776,26 +1776,28 @@ note: first we tell heroku to install all our npm modules in delopment & product
 
 - When it's done, test to add credits on Heroku, if it's not working, you probably need to push the .env.production file to heroku if you put it in the .gitignore file at first to get your stripe key.
 
-## 12 - Mongoose for Survey Creation <a href="mongoose-survey"></a>
+## 12 - Mongoose for Survey Creation <a name="mongoose-survey"></a>
 
-### 12.1 - Survey Model <a href="survey-model"></a>
+### 12.1 - Survey Model <a name="survey-model"></a>
 
 - First we're going to create a mongoose Model class. First create a new file in the models directory called Survey.js and add the code below:
 
 ```js
-  const mongoose = require('mongoose');
-  const { Schema } = mongoose;
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-  const surveySchema = new Schema ({
-    title: String,
-    body: String,
-    subject: String,
-    recipients: [String]
-  })
+const surveySchema = new Schema ({
+  title: String,
+  body: String,
+  subject: String,
+  recipients: [String],
+  yes: { type: Number, default: 0},
+  no: { type: Number, default: 0}
+})
 
-  mongoose.model('surveys', surveySchema);
+mongoose.model('surveys', surveySchema);
 ``` 
-note: the recipients is comma-separated list of email addresses so it's gonna be an array of strings 
+note: the recipients is comma-separated list of email addresses (array of strings) with a sub document collection to know if wether or not the client already clicked (boolean) the yes or no answer to the survey
 
 - Now we need to require the file in the index.js file like so :
 
@@ -1804,3 +1806,36 @@ note: the recipients is comma-separated list of email addresses so it's gonna be
 + require('./models/Survey');
   require('./services/passport');
 ``` 
+- Now we need to create the sub document for the recipient document, create a Recipient.js file in the models directory and add the code below:
+
+```js
+  const mongoose = require('mongoose');
+  const { Schema } = mongoose;
+
+  const recipientSchema = new Schema({
+    email: String,
+    responded: { type: Boolean, default: false }
+  });
+
+  module.exports = recipientSchema;
+```
+note: Instead of registering the Schema to mongoose we export it that we can then import it to the Survey model like so :
+
+```js
+  const mongoose = require('mongoose');
+  const { Schema } = mongoose;
++ const RecipientSchema = require('./Recipient');
+
+  const surveySchema = new Schema({
+    title: String,
+    body: String,
+    subject: String,
++-  recipients: [RecipientSchema],
+    yes: { type: Number, default: 0 },
+    no: { type: Number, default: 0 }
+  });
+
+  mongoose.model('surveys', surveySchema);
+```  
+
+note: in the end the recipients record is gonna be an array of recipient schema records
