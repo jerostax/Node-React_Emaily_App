@@ -1926,4 +1926,4 @@ require('./routes/billingRoutes')(app);
   };
 ```
 
-note: we create a new instance of the survey model with the Survey const. We split() the recipients array with a camma to turn it as an array of email adresses and the we map() over it and return an obeject with every email adresses (we had the trim() fx to make sure that we cut out any extra white space). We pass the _user id to affiliate the survey to a user id. We affiliate the date.now() to the dateSent property to pick up the actual date
+note: we create a new instance of the survey model with the Survey const. We split() the recipients array with a camma to turn it as an array of email adresses and then we map() over it and return an object with every email adresses (we add the trim() fx to make sure that we cut out any extra white space). We pass the _user id to affiliate the survey to a user id. We affiliate the date.now() to the dateSent property to pick up the actual date.
