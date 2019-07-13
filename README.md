@@ -1874,7 +1874,6 @@ const requireCredits = require('../middlewares/requireCredits');
 module.exports = app => {
   app.post('/api/surveys', requireLogin, requireCredits, (req, res) => {});
 };
-
 ```
 
 note: 1st we want to make sure the user is logged in (by importing the middleware requireLogin and passing it as the 2nd argument), 2nd we want to make sure the user has enough credits (at least 1 credit) to build a survey by creating another middleware (as a third argument in the route handler) called requireCredits.js like so :
@@ -1899,3 +1898,32 @@ require('./routes/billingRoutes')(app);
 ```
 
 ### 12.3 - Creating Surveys <a name="create-survey"></a>
+
+- First we want to take the incoming request in the surveyRoutes handler with the different properties of the survey model :
+
+```js
++ const mongoose = require('mongoose');
+  const requireLogin = require('../middlewares/requireLogin');
+  const requireCredits = require('../middlewares/requireCredits');
+
++ const Survey = mongoose.model('surveys');
+
+  module.exports = app => {
+    app.post('/api/surveys', requireLogin, requireCredits, (req, res) => {
++     const { title, subject, body, recipients } = req.body;
+
++     const survey = new Survey({
++       title,
++       subject,
++       body,
++       recipients: recipients.split(',').map(email => ({
++         email: email.trim()
++       })),
++        _user: req.user.id,
++       dateSent: Date.now()
++     });
+    });
+  };
+```
+
+note: we create a new instance of the survey model with the Survey const. We split() the recipients array with a camma to turn it as an array of email adresses and the we map() over it and return an obeject with every email adresses (we had the trim() fx to make sure that we cut out any extra white space). We pass the _user id to affiliate the survey to a user id. We affiliate the date.now() to the dateSent property to pick up the actual date
