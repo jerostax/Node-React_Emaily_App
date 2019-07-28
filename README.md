@@ -2106,4 +2106,34 @@ note : the 2 arguments of the constructor fx are the survey and the surveyTempla
 
 note: addClickTracking() get tracks of clicks in the survey(check sendgrid documentation for more infos on the helpers) 
 
+- Now we have to make sure that we call the method send() to the Mailer object in the surveyRoutes file :
+
+```js
+  const mailer = new Mailer(survey, surveyTemplate);
++ mailer.send();
+``` 
+
+- Time to test email sending !! First go to the client directoy and add the tempory code below in the src/index.js file :
+
+```js
+import reducers from './reducers';
+import axios from 'axios';
+window.axios = axios;
+``` 
+
+- Now go to localhost:3000, open the console and type `axios`, you should see the axios library and have acces to functions like `axios.post`
+
+- Let's manually create a request object and send it to our backend API :
+
+- First we create a fake survey directly in the console like so : 
+
+```js
+const survey = { title: 'Mon Titre', subject: 'Mon Sujet', recipients: 'your@email.com', body: 'Corps du Mail' }
+```
+
+- Then we need to POST it like so always in the console : 
+```js 
+axios.post('/api/surveys', survey);
+``` 
+
 

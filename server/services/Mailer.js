@@ -33,6 +33,7 @@ class Mailer extends helper.Mail {
 
   addRecipients() {
     const personalize = new helper.Personalization();
+
     this.recipients.forEach(recipient => {
       personalize.addTo(recipient);
     });
@@ -46,7 +47,7 @@ class Mailer extends helper.Mail {
       body: this.toJSON()
     });
 
-    const response = this.sgApi.API(request);
+    const response = await this.sgApi.API(request);
     return response;
   }
 }
